@@ -47,10 +47,11 @@ If `SIP_DOMAIN` is unset, domain becomes:
 
 `SIP_TARGET` is still the transport destination.
 
-Contact uses SIPp `[local_ip]`. The runner sets `-i` from:
+Contact uses SIPp `[field5]` (advertised host). Via uses `[local_ip]` (`-i` bind).
 
 ```text
-SIP_EXTERNAL_IP → SIP_CONTACT_HOST → SIP_LOCAL_IP → 127.0.0.1
+bind (-i)     = SIP_LOCAL_IP → auto NIC toward SIP_TARGET
+advertise     = SIP_EXTERNAL_IP → SIP_CONTACT_HOST → STUN → bind
 ```
 
-If `SIP_EXTERNAL_IP` is set, that value becomes SIPp `-i` (and therefore `[local_ip]` in Contact/Via/From).
+Default STUN server: `stun.l.google.com:19302`. Set `SIP_STUN=0` to disable.

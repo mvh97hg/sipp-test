@@ -4,12 +4,14 @@
 
 Breaking: CSV `[field3]` / `[field4]` are auth username and password
 (`SIP_AUTH_USER` / `SIP_AUTH_PASS`). Contact host is no longer a CSV column;
-the runner sets SIPp `-i` (and therefore `[local_ip]`) from
-`SIP_EXTERNAL_IP` → `SIP_CONTACT_HOST` → `SIP_LOCAL_IP` → `127.0.0.1`.
+the runner binds SIPp `-i` to the LAN address and advertises the public
+host in CSV `[field5]` / `-mi`: `SIP_EXTERNAL_IP` → STUN
+(`stun.l.google.com:19302`) → bind IP.
 
 - Control plane is `python3 -m sip_console`. Bash is not a required runtime.
 - Required tools: `python3` and `sipp`.
 - Optional 401/407 then authenticated re-INVITE on UAC scenarios.
+- Auto LAN bind + STUN public IP for Contact/SDP (default `stun.l.google.com:19302`).
 - Shared SIPp argv builder; UAS listen mode; regression/load CSV injection.
 
 ## 1.0.8

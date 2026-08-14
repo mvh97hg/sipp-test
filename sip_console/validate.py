@@ -46,6 +46,12 @@ def validate_xml_text(text: str, *, uas: bool = False) -> None:
             continue
 
     if uas:
+        contacts = _contact_lines(text)
+        if not contacts:
+            raise ValueError("Contact must contain @[field5]")
+        for line in contacts:
+            if "@[field5]" not in line:
+                raise ValueError("Contact must contain @[field5]")
         return
 
     for code in ("401", "407"):
@@ -60,12 +66,12 @@ def validate_xml_text(text: str, *, uas: bool = False) -> None:
 
     contacts = _contact_lines(text)
     if not contacts:
-        raise ValueError("Contact must contain @[local_ip]")
+        raise ValueError("Contact must contain @[field5]")
     for line in contacts:
         if "@[field3]" in line:
             raise ValueError("Contact must not contain @[field3]")
-        if "@[local_ip]" not in line:
-            raise ValueError("Contact must contain @[local_ip]")
+        if "@[field5]" not in line:
+            raise ValueError("Contact must contain @[field5]")
 
 
 def _is_uas_path(path: Path, repo: Path) -> bool:

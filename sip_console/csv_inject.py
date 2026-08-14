@@ -16,7 +16,7 @@ def target_host(target: str) -> str:
     return target
 
 
-def _pad(row: list[str], n: int = 5) -> list[str]:
+def _pad(row: list[str], n: int = 6) -> list[str]:
     row = [x.strip() for x in row]
     if len(row) == 1 and ";" in row[0]:
         row = [x.strip() for x in row[0].split(";")]
@@ -33,6 +33,7 @@ def normalize_rows(
     target: str = "127.0.0.1:5060",
     auth_user: str = "",
     auth_pass: str = "",
+    advertise_ip: str = "",
 ) -> list[list[str]]:
     if not rows:
         raise SystemExit("empty injection CSV")
@@ -50,6 +51,8 @@ def normalize_rows(
             row[3] = auth_user
         if not row[4]:
             row[4] = auth_pass
+        if not row[5]:
+            row[5] = advertise_ip
         if not row[0]:
             raise SystemExit("field0/caller cannot be empty")
         if not row[1]:
@@ -69,6 +72,7 @@ def write_normalized_csv(
     target: str = "127.0.0.1:5060",
     auth_user: str = "",
     auth_pass: str = "",
+    advertise_ip: str = "",
 ) -> Path:
     inp = Path(input_path)
     outp = Path(output_path)
@@ -85,6 +89,7 @@ def write_normalized_csv(
         target=target,
         auth_user=auth_user,
         auth_pass=auth_pass,
+        advertise_ip=advertise_ip,
     )
     with outp.open("w", newline="", encoding="utf-8") as f:
         w = csv.writer(f, delimiter=";", lineterminator="\n")

@@ -5,7 +5,7 @@
 INVITE sip:[field1]@[field2] SIP/2.0
 Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
 Max-Forwards: 70
-Contact: <sip:[field0]@[local_ip]:[local_port];transport=[transport]>
+Contact: <sip:[field0]@[field5]:[local_port];transport=[transport]>
 To: <sip:[field1]@[field2]:[remote_port]>
 From: <sip:[field0]@[field2];transport=[transport]>;tag=[call_number]
 Call-ID: [call_id]
@@ -54,7 +54,7 @@ Content-Length: 0
 INVITE sip:[field1]@[field2] SIP/2.0
 Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
 Max-Forwards: 70
-Contact: <sip:[field0]@[local_ip]:[local_port];transport=[transport]>
+Contact: <sip:[field0]@[field5]:[local_port];transport=[transport]>
 To: <sip:[field1]@[field2]:[remote_port]>
 From: <sip:[field0]@[field2];transport=[transport]>;tag=[call_number]
 Call-ID: [call_id]
@@ -89,7 +89,7 @@ a=sendrecv
 ACK sip:[field1]@[field2]:[remote_port];transport=[transport] SIP/2.0
 Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
 Max-Forwards: 70
-Contact: <sip:[field0]@[local_ip]:[local_port];transport=[transport]>
+Contact: <sip:[field0]@[field5]:[local_port];transport=[transport]>
 To: <sip:[field1]@[field2]:[remote_port]>[peer_tag_param]
 From: <sip:[field0]@[field2];transport=[transport]>;tag=[call_number]
 Call-ID: [call_id]
@@ -103,7 +103,7 @@ Content-Length: 0
 BYE sip:[field1]@[field2]:[remote_port] SIP/2.0
 Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
 Max-Forwards: 70
-Contact: <sip:[field0]@[local_ip]:[local_port];transport=[transport]>
+Contact: <sip:[field0]@[field5]:[local_port];transport=[transport]>
 To: <sip:[field1]@[field2]:[remote_port]>[peer_tag_param]
 From: <sip:[field0]@[field2];transport=[transport]>;tag=[call_number]
 Call-ID: [call_id]
@@ -119,7 +119,7 @@ Content-Length: 0
 ACK sip:[field1]@[field2]:[remote_port];transport=[transport] SIP/2.0
 Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
 Max-Forwards: 70
-Contact: <sip:[field0]@[local_ip]:[local_port];transport=[transport]>
+Contact: <sip:[field0]@[field5]:[local_port];transport=[transport]>
 To: <sip:[field1]@[field2]:[remote_port]>[peer_tag_param]
 From: <sip:[field0]@[field2];transport=[transport]>;tag=[call_number]
 Call-ID: [call_id]
@@ -133,7 +133,7 @@ Content-Length: 0
 BYE sip:[field1]@[field2]:[remote_port] SIP/2.0
 Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
 Max-Forwards: 70
-Contact: <sip:[field0]@[local_ip]:[local_port];transport=[transport]>
+Contact: <sip:[field0]@[field5]:[local_port];transport=[transport]>
 To: <sip:[field1]@[field2]:[remote_port]>[peer_tag_param]
 From: <sip:[field0]@[field2];transport=[transport]>;tag=[call_number]
 Call-ID: [call_id]

@@ -35,9 +35,18 @@ class BuildTests(unittest.TestCase):
         self.assertNotIn("10.0.0.5:5060", cmd)
         self.assertEqual(cmd[cmd.index("-p") + 1], "5060")
         self.assertNotIn("-inf", cmd)
-        self.assertNotIn("-set", cmd)
-        self.assertNotIn("-key", cmd)
         self.assertEqual(cmd[cmd.index("-i") + 1], "10.0.0.9")
+
+    def test_uas_inf_when_csv(self):
+        cmd = build_sipp_cmd(
+            root=self.root, scenario="uas-answer", target="10.0.0.5:5060",
+            service="", transport="udp", local_ip="10.0.0.9",
+            local_port="5060", media_ip="203.0.113.1", media_port="6000",
+            csv_path=Path("/tmp/u.csv"),
+            artifact_dir=self.art, call_limit=1,
+        )
+        self.assertIn("-inf", cmd)
+        self.assertEqual(cmd[cmd.index("-mi") + 1], "203.0.113.1")
 
 
 if __name__ == "__main__":

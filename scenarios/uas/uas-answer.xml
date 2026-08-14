@@ -20,7 +20,7 @@ SIP/2.0 200 OK
 [last_To:];tag=[call_number]
 [last_Call-ID:]
 CSeq: [last_CSeq:]
-Contact: <sip:uas@[local_ip]:[local_port];transport=[transport]>
+Contact: <sip:uas@[field5]:[local_port];transport=[transport]>
 Allow: INVITE, ACK, CANCEL, BYE, OPTIONS, INFO
 Supported: timer, replaces, 100rel
 User-Agent: Sip-Console/1.0.5
