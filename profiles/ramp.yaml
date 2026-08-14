@@ -1,0 +1,19 @@
+name: basic-ramp
+scenario: uac-basic
+phases:
+  - name: warmup
+    cps: 5
+    max_concurrent: 50
+    calls: 50
+  - name: low
+    cps: 25
+    max_concurrent: 250
+    calls: 250
+  - name: medium
+    cps: 50
+    max_concurrent: 500
+    calls: 500
+  - name: high
+    cps: 100
+    max_concurrent: 1000
+    calls: 1000

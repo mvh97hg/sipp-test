@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE scenario SYSTEM "sipp.dtd">
+<scenario name="uac-auth">
+  <send retrans="500"><![CDATA[
+INVITE sip:[field1]@[field2]:[remote_port];transport=[transport] SIP/2.0
+Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
+Max-Forwards: 70
+Contact: <sip:[field0]@[field3]:[local_port];transport=[transport]>
+To: <sip:[field1]@[field2]:[remote_port]>
+From: <sip:[field0]@[field2]>;tag=[call_number]
+Call-ID: [call_id]
+CSeq: 1 INVITE
+Allow: INVITE, ACK, CANCEL, BYE, OPTIONS, INFO
+User-Agent: Sip-Console/1.0.5
+Content-Length: 0
+  ]]></send>
+  <recv response="100" optional="true"/>
+  <recv response="401" auth="true" optional="true"/>
+  <recv response="407" auth="true" optional="true"/>
+  <recv response="200" optional="true"/>
+</scenario>

@@ -1,0 +1,5 @@
+name: basic-10cps
+scenario: uac-basic
+cps: 10
+max_concurrent: 100
+calls: 100

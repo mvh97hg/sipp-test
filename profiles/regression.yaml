@@ -1,0 +1,20 @@
+name: asterisk-regression
+tests:
+  - name: basic
+    scenario: uac-basic
+    enabled: true
+  - name: busy
+    scenario: uac-busy
+    enabled: false
+  - name: notfound
+    scenario: uac-notfound
+    enabled: false
+  - name: service-unavailable
+    scenario: uac-service-unavailable
+    enabled: false
+  - name: dtmf
+    scenario: dtmf
+    enabled: true
+  - name: rtp-echo
+    scenario: rtp-echo
+    enabled: true
