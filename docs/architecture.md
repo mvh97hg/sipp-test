@@ -51,7 +51,7 @@ Contact uses SIPp `[field5]` (advertised host). Via uses `[local_ip]` (`-i` bind
 
 ```text
 bind (-i)     = SIP_LOCAL_IP → auto NIC toward SIP_TARGET
-advertise     = SIP_EXTERNAL_IP → SIP_CONTACT_HOST → STUN → bind
+advertise     = SIP_EXTERNAL_IP → SIP_CONTACT_HOST → STUN (public SIP_TARGET only) → bind
 ```
 
 Default STUN server: `stun.l.google.com:19302`. Set `SIP_STUN=0` to disable.

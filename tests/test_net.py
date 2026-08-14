@@ -84,12 +84,31 @@ class ResolveBindAdvertiseTests(unittest.TestCase):
         self.assertEqual(bind, "10.0.0.2")
         self.assertEqual(adv, "198.51.100.9")
 
-    def test_stun_when_no_external(self):
+    def test_stun_when_target_is_public(self):
         with patch("sip_console.net.detect_local_ip", return_value="10.0.0.2"):
             with patch("sip_console.net.stun_public_ip", return_value="198.51.100.1"):
-                bind, adv = resolve_bind_advertise({}, "10.1.1.1:5060")
+                bind, adv = resolve_bind_advertise({}, "8.8.8.8:5060")
         self.assertEqual(bind, "10.0.0.2")
         self.assertEqual(adv, "198.51.100.1")
+
+    def test_lan_to_lan_skips_stun(self):
+        with patch("sip_console.net.stun_public_ip") as stun:
+            bind, adv = resolve_bind_advertise(
+                {"SIP_LOCAL_IP": "172.16.30.110"},
+                "172.16.30.15:5090",
+            )
+        stun.assert_not_called()
+        self.assertEqual(bind, "172.16.30.110")
+        self.assertEqual(adv, "172.16.30.110")
+
+    def test_private_target_skips_stun(self):
+        with patch("sip_console.net.stun_public_ip") as stun:
+            bind, adv = resolve_bind_advertise(
+                {"SIP_LOCAL_IP": "10.0.0.2"},
+                "10.1.1.1:5060",
+            )
+        stun.assert_not_called()
+        self.assertEqual((bind, adv), ("10.0.0.2", "10.0.0.2"))
 
     def test_stun_disabled(self):
         with patch("sip_console.net.detect_local_ip", return_value="10.0.0.2"):
@@ -102,7 +121,7 @@ class ResolveBindAdvertiseTests(unittest.TestCase):
     def test_stun_failure_falls_back_to_bind(self):
         with patch("sip_console.net.detect_local_ip", return_value="10.0.0.2"):
             with patch("sip_console.net.stun_public_ip", return_value=None):
-                bind, adv = resolve_bind_advertise({}, "10.1.1.1:5060")
+                bind, adv = resolve_bind_advertise({}, "8.8.8.8:5060")
         self.assertEqual((bind, adv), ("10.0.0.2", "10.0.0.2"))
 
 

@@ -591,7 +591,8 @@ CSV fields:
 [field5] = advertised Contact host (STUN / SIP_EXTERNAL_IP / bind)
 
 Via `[local_ip]` is the bind address (`-i`). Contact/SDP use field5 / `-mi`:
-  SIP_EXTERNAL_IP → SIP_CONTACT_HOST → STUN (stun.l.google.com:19302) → bind
+  SIP_EXTERNAL_IP → SIP_CONTACT_HOST → STUN (only if SIP_TARGET is a public IP)
+  → bind. Private/LAN targets (e.g. 172.16.30.110 → 172.16.30.15) keep the bind IP.
 ```
 
 `data/users.csv` remains `SEQUENTIAL` plus three-column rows. Auth comes from

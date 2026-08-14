@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import ipaddress
 import os
 import socket
 import struct
@@ -90,6 +91,34 @@ def stun_public_ip(
     return parse_stun_mapped_ipv4(data)
 
 
+def resolve_ipv4(host: str) -> str | None:
+    host = (host or "").strip()
+    if not host:
+        return None
+    try:
+        addr = ipaddress.ip_address(host)
+        if isinstance(addr, ipaddress.IPv4Address):
+            return str(addr)
+        return None
+    except ValueError:
+        pass
+    try:
+        infos = socket.getaddrinfo(host, None, socket.AF_INET, socket.SOCK_DGRAM)
+    except OSError:
+        return None
+    if not infos:
+        return None
+    return infos[0][4][0]
+
+
+def is_on_net_signaling(dest_ip: str) -> bool:
+    try:
+        addr = ipaddress.ip_address(dest_ip)
+    except ValueError:
+        return False
+    return bool(addr.is_private or addr.is_loopback or addr.is_link_local)
+
+
 def _truthy_disabled(value: str) -> bool:
     return value.strip().lower() in ("0", "false", "no", "off")
 
@@ -100,6 +129,9 @@ def resolve_bind_advertise(env: Mapping[str, str], target: str) -> tuple[str, st
     advertised = (env.get("SIP_EXTERNAL_IP") or env.get("SIP_CONTACT_HOST") or "").strip()
     if advertised:
         return bind, advertised
+    dest_ip = resolve_ipv4(dest_host)
+    if dest_ip and is_on_net_signaling(dest_ip):
+        return bind, bind
     stun_on = not _truthy_disabled(env.get("SIP_STUN", "1"))
     if stun_on:
         shost, sport = stun_server_host_port(env)

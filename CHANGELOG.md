@@ -11,7 +11,7 @@ host in CSV `[field5]` / `-mi`: `SIP_EXTERNAL_IP` → STUN
 - Control plane is `python3 -m sip_console`. Bash is not a required runtime.
 - Required tools: `python3` and `sipp`.
 - Optional 401/407 then authenticated re-INVITE on UAC scenarios.
-- Auto LAN bind + STUN public IP for Contact/SDP (default `stun.l.google.com:19302`).
+- Auto LAN bind + STUN public IP for Contact/SDP when `SIP_TARGET` is not a private/LAN address.
 - Shared SIPp argv builder; UAS listen mode; regression/load CSV injection.
 
 ## 1.0.8

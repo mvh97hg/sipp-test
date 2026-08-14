@@ -18,8 +18,8 @@ NAT (softphone-style):
 ```text
 bind (-i / Via [local_ip])  = SIP_LOCAL_IP → UDP route to SIP_TARGET
 advertise ([field5], -mi)   = SIP_EXTERNAL_IP → SIP_CONTACT_HOST
-                              → STUN (stun.l.google.com:19302)
-                              → bind IP
+                              → STUN if SIP_TARGET is a public IP
+                              → bind IP (LAN/private destinations skip STUN)
 ```
 
 `SIP_STUN=0` disables STUN. `SIP_STUN_SERVER` overrides the default STUN host.
