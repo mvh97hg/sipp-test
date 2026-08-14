@@ -28,7 +28,7 @@ def run_sipp(
     env = os.environ
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
     out = artifact_dir if artifact_dir is not None else (
-        root / "artifacts" / f"{stamp}-{phase or scenario}"
+        root / "logs" / f"{stamp}-{phase or scenario}"
     )
     out.mkdir(parents=True, exist_ok=True)
     csv_run = out / "users.normalized.csv"
@@ -70,7 +70,7 @@ def run_sipp(
     )
     (out / "command.txt").write_text(shlex.join(cmd) + "\n", encoding="utf-8")
     with open(out / "stdout.log", "w") as so, open(out / "stderr.log", "w") as se:
-        rc = subprocess.run(cmd, stdout=so, stderr=se).returncode
+        rc = subprocess.run(cmd, stdout=so, stderr=se, cwd=out).returncode
     write_result(scenario=scenario, exit_code=rc, out=out)
     print(f"Artifacts: {out}")
     return rc

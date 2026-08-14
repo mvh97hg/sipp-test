@@ -1,0 +1,12 @@
+The following events occurred:
+2026-08-14	13:57:03.537294	1786690623.537294: Aborting call on unexpected message for Call-Id '1-1340875@172.16.30.110': while expecting '183' (index 3), received 'SIP/2.0 480 Temporarily Unavailable
+Call-ID: 1-1340875@172.16.30.110
+From: <sip:1234@demo.hmv.io.vn>;tag=1
+To: <sip:1001@172.16.30.25>;tag=93d77d45-1765-405f-9c3b-c48b6d3cfbbd
+CSeq: 1 INVITE
+Allow: OPTIONS, REGISTER, SUBSCRIBE, NOTIFY, PUBLISH, INVITE, ACK, BYE, CANCEL, UPDATE, PRACK, MESSAGE, INFO, REFER
+Content-Length:  0
+Via: SIP/2.0/UDP 172.16.30.110:5060;received=172.16.30.110;branch=z9hG4bK-1340875-1-0;rport=5060
+Server: VCC v1.0
+
+'

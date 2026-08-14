@@ -1,0 +1,11 @@
+Resolving remote host '172.16.30.15'... Done.
+2026-08-14	14:01:44.058336	1786690904.058336: Aborting call on unexpected message for Call-Id '1-1341274@172.16.30.110': while expecting '200' (index 22), received 'SIP/2.0 481 Call/Transaction Does Not Exist
+Via: SIP/2.0/UDP 172.16.30.110:5060;branch=z9hG4bK-1341274-1-21;rport=5060;received=172.16.30.110
+To: <sip:1001@demo.hmv.io.vn:5090>;tag=d13a8008-96d4-44e1-8969-0a102e86fa5e
+From: <sip:1234@demo.hmv.io.vn;transport=UDP>;tag=1
+Call-ID: 1-1341274@172.16.30.110
+CSeq: 2 BYE
+Server: kamailio (6.0.6 (x86_64/linux))
+Content-Length: 0
+
+'

@@ -40,7 +40,7 @@ class RegressionArtifactLayoutTests(unittest.TestCase):
             with patch("sip_console.regression.run_sipp", side_effect=_fake_run_sipp):
                 rc = run_regression(root, profile)
             self.assertEqual(rc, 0)
-            arts = list((root / "artifacts").glob("*-regression"))
+            arts = list((root / "logs").glob("*-regression"))
             self.assertEqual(len(arts), 1)
             outroot = arts[0]
             summary = json.loads((outroot / "summary.json").read_text(encoding="utf-8"))

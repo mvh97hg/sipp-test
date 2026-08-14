@@ -225,7 +225,7 @@ and realm must match Asterisk.
 Every test creates:
 
 ```text
-artifacts/
+logs/
   YYYYMMDD-HHMMSS-test-name/
     command.txt
     stdout.log
@@ -233,7 +233,8 @@ artifacts/
     messages.log
     errors.log
     statistics.csv
-    rtt.csv
+    shortmessages.log
+    calldebug.log
     result.json
 ```
 

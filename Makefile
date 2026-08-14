@@ -31,4 +31,5 @@ list:
 	python3 -m sip_console list
 
 clean:
-	rm -rf artifacts
+	rm -rf logs artifacts
+	rm -f -- *.csv *.log uac-*_*.csv uac-*_*.log 2>/dev/null || true

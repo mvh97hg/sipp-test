@@ -1,0 +1,11 @@
+Resolving remote host '172.16.30.15'... Done.
+2026-08-14	13:50:55.996316	1786690255.996316: Aborting call on unexpected message for Call-Id '1-1338431@172.16.30.110': while expecting '180' (index 2), received 'SIP/2.0 408 Request Timeout
+Call-ID: 1-1338431@172.16.30.110
+From: <sip:1234@demo.hmv.io.vn>;tag=1
+To: <sip:1001@172.16.30.25>;tag=456f62bf-31d6-4805-b410-298e0388e285
+CSeq: 1 INVITE
+Content-Length:  0
+Via: SIP/2.0/UDP 172.16.30.110:5060;received=172.16.30.110;branch=z9hG4bK-1338431-1-0;rport=5060
+Server: VCC v1.0
+
+'

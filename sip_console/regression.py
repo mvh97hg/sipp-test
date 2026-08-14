@@ -27,7 +27,7 @@ def run_regression(root: Path, profile_path: Path) -> int:
     text = Path(profile_path).read_text(encoding="utf-8")
     tests = parse_regression_tests(text)
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    outroot = root / "artifacts" / f"{stamp}-regression"
+    outroot = root / "logs" / f"{stamp}-regression"
     outroot.mkdir(parents=True, exist_ok=True)
 
     passed = failed = 0

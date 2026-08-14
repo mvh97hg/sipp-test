@@ -65,6 +65,12 @@ def build_sipp_cmd(
         str(Path(artifact_dir) / "messages.log"),
         "-error_file",
         str(Path(artifact_dir) / "errors.log"),
+        "-stf",
+        str(Path(artifact_dir) / "statistics.csv"),
+        "-shortmessage_file",
+        str(Path(artifact_dir) / "shortmessages.log"),
+        "-calldebug_file",
+        str(Path(artifact_dir) / "calldebug.log"),
     ]
     if extra:
         cmd += extra

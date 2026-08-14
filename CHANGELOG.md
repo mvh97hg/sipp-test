@@ -14,6 +14,7 @@ host in CSV `[field5]` / `-mi`: `SIP_EXTERNAL_IP` → STUN
 - Auto LAN bind + STUN public IP for Contact/SDP when `SIP_TARGET` is not a private/LAN address.
 - In-dialog ACK/BYE/INFO use `[next_url]` / `[routes]` from the dialog 200 OK (`rrs="true"`).
 - Shared SIPp argv builder; UAS listen mode; regression/load CSV injection.
+- Run output lives under `logs/`; bash `scripts/` wrappers were removed.
 
 ## 1.0.8
 

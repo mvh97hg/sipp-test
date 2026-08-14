@@ -23,6 +23,9 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(cmd[cmd.index("-i") + 1], "1.2.3.4")
         self.assertIn("-inf", cmd)
         self.assertEqual(cmd[cmd.index("-t") + 1], "u1")
+        self.assertEqual(cmd[cmd.index("-stf") + 1], "/tmp/art/statistics.csv")
+        self.assertEqual(cmd[cmd.index("-shortmessage_file") + 1], "/tmp/art/shortmessages.log")
+        self.assertEqual(cmd[cmd.index("-calldebug_file") + 1], "/tmp/art/calldebug.log")
 
     def test_uas_has_no_remote_target(self):
         cmd = build_sipp_cmd(
