@@ -1,7 +1,0 @@
-{
-  "scenario": "uac-basic",
-  "exit_code": -11,
-  "passed": false,
-  "created_at": "2026-08-14T06:53:33.098049+00:00",
-  "artifacts": "/home/code/sip-test-console/artifacts/20260814-135300-uac-basic"
-}
