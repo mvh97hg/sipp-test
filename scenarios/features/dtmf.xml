@@ -32,7 +32,7 @@ a=sendrecv
   <recv response="183" optional="true"/>
   <recv response="401" auth="true" optional="true" next="auth-invite"/>
   <recv response="407" auth="true" optional="true" next="auth-invite"/>
-  <recv response="200"/>
+  <recv response="200" rrs="true"/>
 
   <nop next="post-noauth"/>
 
@@ -79,13 +79,14 @@ a=sendrecv
   <recv response="100" optional="true"/>
   <recv response="180" optional="true"/>
   <recv response="183" optional="true"/>
-  <recv response="200"/>
+  <recv response="200" rrs="true"/>
 
   <label id="post-auth"/>
 
   <send><![CDATA[
-ACK sip:[field1]@[field2]:[remote_port];transport=[transport] SIP/2.0
+ACK [next_url] SIP/2.0
 Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
+[routes]
 Max-Forwards: 70
 Contact: <sip:[field0]@[field5]:[local_port];transport=[transport]>
 To: <sip:[field1]@[field2]:[remote_port]>[peer_tag_param]
@@ -98,8 +99,9 @@ Content-Length: 0
   <pause milliseconds="500"/>
 
   <send><![CDATA[
-INFO sip:[field1]@[field2]:[remote_port];transport=[transport] SIP/2.0
+INFO [next_url] SIP/2.0
 Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
+[routes]
 Max-Forwards: 70
 Contact: <sip:[field0]@[field5]:[local_port];transport=[transport]>
 To: <sip:[field1]@[field2]:[remote_port]>[peer_tag_param]
@@ -117,8 +119,9 @@ Duration=160
   <pause milliseconds="500"/>
 
   <send><![CDATA[
-INFO sip:[field1]@[field2]:[remote_port];transport=[transport] SIP/2.0
+INFO [next_url] SIP/2.0
 Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
+[routes]
 Max-Forwards: 70
 Contact: <sip:[field0]@[field5]:[local_port];transport=[transport]>
 To: <sip:[field1]@[field2]:[remote_port]>[peer_tag_param]
@@ -136,8 +139,9 @@ Duration=160
   <pause milliseconds="500"/>
 
   <send><![CDATA[
-BYE sip:[field1]@[field2]:[remote_port];transport=[transport] SIP/2.0
+BYE [next_url] SIP/2.0
 Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
+[routes]
 Max-Forwards: 70
 Contact: <sip:[field0]@[field5]:[local_port];transport=[transport]>
 To: <sip:[field1]@[field2]:[remote_port]>[peer_tag_param]
@@ -152,8 +156,9 @@ Content-Length: 0
   <label id="post-noauth"/>
 
   <send><![CDATA[
-ACK sip:[field1]@[field2]:[remote_port];transport=[transport] SIP/2.0
+ACK [next_url] SIP/2.0
 Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
+[routes]
 Max-Forwards: 70
 Contact: <sip:[field0]@[field5]:[local_port];transport=[transport]>
 To: <sip:[field1]@[field2]:[remote_port]>[peer_tag_param]
@@ -166,8 +171,9 @@ Content-Length: 0
   <pause milliseconds="500"/>
 
   <send><![CDATA[
-INFO sip:[field1]@[field2]:[remote_port];transport=[transport] SIP/2.0
+INFO [next_url] SIP/2.0
 Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
+[routes]
 Max-Forwards: 70
 Contact: <sip:[field0]@[field5]:[local_port];transport=[transport]>
 To: <sip:[field1]@[field2]:[remote_port]>[peer_tag_param]
@@ -185,8 +191,9 @@ Duration=160
   <pause milliseconds="500"/>
 
   <send><![CDATA[
-INFO sip:[field1]@[field2]:[remote_port];transport=[transport] SIP/2.0
+INFO [next_url] SIP/2.0
 Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
+[routes]
 Max-Forwards: 70
 Contact: <sip:[field0]@[field5]:[local_port];transport=[transport]>
 To: <sip:[field1]@[field2]:[remote_port]>[peer_tag_param]
@@ -204,8 +211,9 @@ Duration=160
   <pause milliseconds="500"/>
 
   <send><![CDATA[
-BYE sip:[field1]@[field2]:[remote_port];transport=[transport] SIP/2.0
+BYE [next_url] SIP/2.0
 Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
+[routes]
 Max-Forwards: 70
 Contact: <sip:[field0]@[field5]:[local_port];transport=[transport]>
 To: <sip:[field1]@[field2]:[remote_port]>[peer_tag_param]

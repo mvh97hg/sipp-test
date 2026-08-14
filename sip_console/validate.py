@@ -73,6 +73,12 @@ def validate_xml_text(text: str, *, uas: bool = False) -> None:
         if "@[field5]" not in line:
             raise ValueError("Contact must contain @[field5]")
 
+    if re.search(r"\bBYE ", text):
+        if "[next_url]" not in text:
+            raise ValueError("in-dialog BYE must use [next_url] as Request-URI")
+        if 'rrs="true"' not in text:
+            raise ValueError('200 OK that establishes the dialog must set rrs="true"')
+
 
 def _is_uas_path(path: Path, repo: Path) -> bool:
     resolved = path.resolve()

@@ -69,6 +69,15 @@ class ValidateRulesTests(unittest.TestCase):
             self.assertIn("407", str(ctx.exception))
             self.assertIn("auth", str(ctx.exception))
 
+    def test_bye_without_next_url_fails(self):
+        xml = GOOD_XML.replace(
+            "[authentication username=[field3] password=[field4]]",
+            "[authentication username=[field3] password=[field4]]\nBYE sip:[field1]@[field2]:[remote_port] SIP/2.0",
+        )
+        with self.assertRaises(ValueError) as ctx:
+            validate_xml_text(xml, uas=False)
+        self.assertIn("next_url", str(ctx.exception))
+
 
 if __name__ == "__main__":
     unittest.main()
