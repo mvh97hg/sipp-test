@@ -1,34 +1,34 @@
 .PHONY: check validate basic load ramp regression list clean
 
 check:
-	./scripts/check.sh
+	python3 -m sip_console check
 
 validate:
-	./scripts/validate.sh
+	python3 -m sip_console validate
 
 basic:
-	./scripts/run.sh uac-basic
+	python3 -m sip_console run uac-basic
 
 uas:
-	./scripts/run.sh uas-answer
+	python3 -m sip_console run uas-answer --listen 5060
 
 dtmf:
-	./scripts/run.sh dtmf
+	python3 -m sip_console run dtmf
 
 rtp:
-	./scripts/run.sh rtp-echo
+	python3 -m sip_console run rtp-echo
 
 load:
-	./scripts/load.sh profiles/load-10cps.yaml
+	python3 -m sip_console load profiles/load-10cps.yaml
 
 ramp:
-	./scripts/load.sh profiles/ramp.yaml
+	python3 -m sip_console load profiles/ramp.yaml
 
 regression:
-	./scripts/regression.sh profiles/regression.yaml
+	python3 -m sip_console regression profiles/regression.yaml
 
 list:
-	./tools/scenario-list.sh
+	python3 -m sip_console list
 
 clean:
 	rm -rf artifacts

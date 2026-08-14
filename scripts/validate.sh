@@ -1,4 +1,2 @@
 #!/usr/bin/env bash
-set -euo pipefail
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-python3 "$ROOT/tools/validate.py" "$ROOT/scenarios"
+exec python3 -m sip_console validate "$@"
