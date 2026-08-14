@@ -34,7 +34,7 @@ a=sendrecv
   <recv response="407" auth="true" optional="true" next="auth-invite"/>
   <recv response="200"/>
 
-  <nop next="post-auth"/>
+  <nop next="post-noauth"/>
 
   <label id="auth-invite"/>
   <send><![CDATA[
@@ -91,7 +91,7 @@ Contact: <sip:[field0]@[contact_host]:[local_port];transport=[transport]>
 To: <sip:[field1]@[field2]:[remote_port]>[peer_tag_param]
 From: <sip:[field0]@[field2]>;tag=[call_number]
 Call-ID: [call_id]
-CSeq: [cseq] ACK
+CSeq: [last_cseq_number] ACK
 Content-Length: 0
   ]]></send>
 
@@ -105,7 +105,7 @@ Contact: <sip:[field0]@[contact_host]:[local_port];transport=[transport]>
 To: <sip:[field1]@[field2]:[remote_port]>[peer_tag_param]
 From: <sip:[field0]@[field2]>;tag=[call_number]
 Call-ID: [call_id]
-CSeq: [cseq] INFO
+CSeq: 3 INFO
 Content-Type: application/dtmf-relay
 Content-Length: [len]
 
@@ -124,7 +124,7 @@ Contact: <sip:[field0]@[contact_host]:[local_port];transport=[transport]>
 To: <sip:[field1]@[field2]:[remote_port]>[peer_tag_param]
 From: <sip:[field0]@[field2]>;tag=[call_number]
 Call-ID: [call_id]
-CSeq: [cseq] INFO
+CSeq: 4 INFO
 Content-Type: application/dtmf-relay
 Content-Length: [len]
 
@@ -143,8 +143,78 @@ Contact: <sip:[field0]@[contact_host]:[local_port];transport=[transport]>
 To: <sip:[field1]@[field2]:[remote_port]>[peer_tag_param]
 From: <sip:[field0]@[field2]>;tag=[call_number]
 Call-ID: [call_id]
-CSeq: [cseq] BYE
+CSeq: 5 BYE
 Content-Length: 0
   ]]></send>
   <recv response="200"/>
+  <nop next="done"/>
+
+  <label id="post-noauth"/>
+
+  <send><![CDATA[
+ACK sip:[field1]@[field2]:[remote_port];transport=[transport] SIP/2.0
+Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
+Max-Forwards: 70
+Contact: <sip:[field0]@[contact_host]:[local_port];transport=[transport]>
+To: <sip:[field1]@[field2]:[remote_port]>[peer_tag_param]
+From: <sip:[field0]@[field2]>;tag=[call_number]
+Call-ID: [call_id]
+CSeq: [last_cseq_number] ACK
+Content-Length: 0
+  ]]></send>
+
+  <pause milliseconds="500"/>
+
+  <send><![CDATA[
+INFO sip:[field1]@[field2]:[remote_port];transport=[transport] SIP/2.0
+Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
+Max-Forwards: 70
+Contact: <sip:[field0]@[contact_host]:[local_port];transport=[transport]>
+To: <sip:[field1]@[field2]:[remote_port]>[peer_tag_param]
+From: <sip:[field0]@[field2]>;tag=[call_number]
+Call-ID: [call_id]
+CSeq: 2 INFO
+Content-Type: application/dtmf-relay
+Content-Length: [len]
+
+Signal=1
+Duration=160
+  ]]></send>
+  <recv response="200" optional="true"/>
+
+  <pause milliseconds="500"/>
+
+  <send><![CDATA[
+INFO sip:[field1]@[field2]:[remote_port];transport=[transport] SIP/2.0
+Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
+Max-Forwards: 70
+Contact: <sip:[field0]@[contact_host]:[local_port];transport=[transport]>
+To: <sip:[field1]@[field2]:[remote_port]>[peer_tag_param]
+From: <sip:[field0]@[field2]>;tag=[call_number]
+Call-ID: [call_id]
+CSeq: 3 INFO
+Content-Type: application/dtmf-relay
+Content-Length: [len]
+
+Signal=2
+Duration=160
+  ]]></send>
+  <recv response="200" optional="true"/>
+
+  <pause milliseconds="500"/>
+
+  <send><![CDATA[
+BYE sip:[field1]@[field2]:[remote_port];transport=[transport] SIP/2.0
+Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
+Max-Forwards: 70
+Contact: <sip:[field0]@[contact_host]:[local_port];transport=[transport]>
+To: <sip:[field1]@[field2]:[remote_port]>[peer_tag_param]
+From: <sip:[field0]@[field2]>;tag=[call_number]
+Call-ID: [call_id]
+CSeq: 4 BYE
+Content-Length: 0
+  ]]></send>
+  <recv response="200"/>
+
+  <label id="done"/>
 </scenario>

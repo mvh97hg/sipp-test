@@ -37,7 +37,7 @@ a=sendrecv
   <recv response="407" auth="true" optional="true" next="auth-invite"/>
   <recv response="200"/>
 
-  <nop next="post-auth"/>
+  <nop next="post-noauth"/>
 
   <label id="auth-invite"/>
   <send><![CDATA[
@@ -72,11 +72,12 @@ o=Sip-Console 1 1 IN IP[local_ip_type] [media_ip]
 s=Sip-Console
 c=IN IP[media_ip_type] [media_ip]
 t=0 0
-m=audio [media_port] RTP/AVP 0 101 8
+m=audio [media_port] RTP/AVP 0 101 8 3
 a=rtpmap:0 PCMU/8000
 a=rtpmap:101 telephone-event/8000
 a=fmtp:101 0-16
 a=rtpmap:8 PCMA/8000
+a=rtpmap:3 GSM/8000
 a=sendrecv
   ]]></send>
   <recv response="100" optional="true"/>
@@ -94,7 +95,7 @@ Contact: <sip:[field0]@[contact_host]:[local_port];transport=[transport]>
 To: <sip:[field1]@[field2]:[remote_port]>[peer_tag_param]
 From: <sip:[field0]@[field2]>;tag=[call_number]
 Call-ID: [call_id]
-CSeq: [cseq] ACK
+CSeq: [last_cseq_number] ACK
 Content-Length: 0
   ]]></send>
 
@@ -108,10 +109,42 @@ Contact: <sip:[field0]@[contact_host]:[local_port];transport=[transport]>
 To: <sip:[field1]@[field2]:[remote_port]>[peer_tag_param]
 From: <sip:[field0]@[field2]>;tag=[call_number]
 Call-ID: [call_id]
-CSeq: [cseq] BYE
+CSeq: 3 BYE
 Content-Length: 0
   ]]></send>
   <recv response="200"/>
+  <nop next="done"/>
+
+  <label id="post-noauth"/>
+
+  <send><![CDATA[
+ACK sip:[field1]@[field2]:[remote_port];transport=[transport] SIP/2.0
+Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
+Max-Forwards: 70
+Contact: <sip:[field0]@[contact_host]:[local_port];transport=[transport]>
+To: <sip:[field1]@[field2]:[remote_port]>[peer_tag_param]
+From: <sip:[field0]@[field2]>;tag=[call_number]
+Call-ID: [call_id]
+CSeq: [last_cseq_number] ACK
+Content-Length: 0
+  ]]></send>
+
+  <pause milliseconds="10000"/>
+
+  <send><![CDATA[
+BYE sip:[field1]@[field2]:[remote_port];transport=[transport] SIP/2.0
+Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
+Max-Forwards: 70
+Contact: <sip:[field0]@[contact_host]:[local_port];transport=[transport]>
+To: <sip:[field1]@[field2]:[remote_port]>[peer_tag_param]
+From: <sip:[field0]@[field2]>;tag=[call_number]
+Call-ID: [call_id]
+CSeq: 2 BYE
+Content-Length: 0
+  ]]></send>
+  <recv response="200"/>
+
+  <label id="done"/>
 
   <ResponseTimeRepartition value="10,20,50,100,250,500,1000,2000,5000"/>
   <CallLengthRepartition value="10,50,100,500,1000,5000,10000"/>
