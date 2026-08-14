@@ -18,9 +18,10 @@ class BuildTests(unittest.TestCase):
         )
         self.assertEqual(cmd[0], "sipp")
         self.assertEqual(cmd[1], "10.0.0.5:5060")
-        self.assertIn("-set", cmd)
-        i = cmd.index("-set")
-        self.assertEqual(cmd[i:i+3], ["-set", "contact_host", "1.2.3.4"])
+        self.assertNotIn("-set", cmd)
+        self.assertIn("-key", cmd)
+        i = cmd.index("-key")
+        self.assertEqual(cmd[i:i+3], ["-key", "contact_host", "1.2.3.4"])
         self.assertIn("-inf", cmd)
         self.assertEqual(cmd[cmd.index("-t") + 1], "u1")
 
@@ -35,8 +36,9 @@ class BuildTests(unittest.TestCase):
         self.assertNotIn("10.0.0.5:5060", cmd)
         self.assertEqual(cmd[cmd.index("-p") + 1], "5060")
         self.assertNotIn("-inf", cmd)
-        i = cmd.index("-set")
-        self.assertEqual(cmd[i : i + 3], ["-set", "contact_host", "10.0.0.9"])
+        self.assertNotIn("-set", cmd)
+        i = cmd.index("-key")
+        self.assertEqual(cmd[i : i + 3], ["-key", "contact_host", "10.0.0.9"])
 
 
 if __name__ == "__main__":

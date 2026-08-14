@@ -37,7 +37,7 @@ The following Zoiper-specific headers are intentionally not copied:
 `X-cisco-serviceuri`, `Allow-Events`, and the exact Zoiper `User-Agent`.
 They are application-specific rather than mandatory for a baseline INVITE.
 
-For NAT, Contact uses SIPp `[contact_host]` (`-set`, not CSV field3).
+For NAT, Contact uses SIPp `[contact_host]` (`-key`, not CSV field3).
 Resolution order:
 
 ```text

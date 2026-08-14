@@ -47,7 +47,7 @@ If `SIP_DOMAIN` is unset, domain becomes:
 
 `SIP_TARGET` is still the transport destination.
 
-Contact host is not a CSV field. The runner passes it to SIPp with `-set`:
+Contact host is not a CSV field. The runner passes it to SIPp with `-key`:
 
 ```text
 SIP_EXTERNAL_IP → SIP_CONTACT_HOST → SIP_LOCAL_IP → 127.0.0.1

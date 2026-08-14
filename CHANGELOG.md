@@ -4,13 +4,14 @@
 
 Breaking: CSV `[field3]` / `[field4]` are auth username and password
 (`SIP_AUTH_USER` / `SIP_AUTH_PASS`). Contact host is no longer a CSV column;
-the runner sets SIPp `[contact_host]` from
+the runner sets SIPp `[contact_host]` via `-key` from
 `SIP_EXTERNAL_IP` → `SIP_CONTACT_HOST` → `SIP_LOCAL_IP` → `127.0.0.1`.
 
 - Control plane is `python3 -m sip_console`. Bash is not a required runtime.
 - Required tools: `python3` and `sipp`.
 - Optional 401/407 then authenticated re-INVITE on UAC scenarios.
 - Shared SIPp argv builder; UAS listen mode; regression/load CSV injection.
+- `[contact_host]` is a SIPp generic keyword (`-key`), not a `-set` script variable.
 
 ## 1.0.8
 
