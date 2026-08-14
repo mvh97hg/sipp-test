@@ -31,6 +31,19 @@ Contact: <sip:[field0]@[field3]:[local_port];transport=[transport]>
 </scenario>
 """
 
+# 401 is paired with auth="true"; 407 is a separate recv without auth.
+UNPAIRED_407_XML = """<?xml version="1.0" encoding="ISO-8859-1" ?>
+<scenario name="fixture-unpaired-407">
+  <recv response="401" auth="true" optional="true"/>
+  <recv response="407" optional="true"/>
+  <send><![CDATA[
+INVITE sip:[field1]@[field2] SIP/2.0
+Contact: <sip:[field0]@[contact_host]:[local_port];transport=[transport]>
+[authentication username=[field3] password=[field4]]
+  ]]></send>
+</scenario>
+"""
+
 
 class ValidateRulesTests(unittest.TestCase):
     def test_auth_present_fixture_passes(self):
@@ -46,6 +59,15 @@ class ValidateRulesTests(unittest.TestCase):
             with self.assertRaises(ValueError) as ctx:
                 validate_xml_text(path.read_text(encoding="utf-8"), uas=False)
             self.assertIn("field3", str(ctx.exception))
+
+    def test_401_auth_does_not_satisfy_407_without_auth(self):
+        with tempfile.TemporaryDirectory() as td:
+            path = Path(td) / "unpaired.xml"
+            path.write_text(UNPAIRED_407_XML, encoding="utf-8")
+            with self.assertRaises(ValueError) as ctx:
+                validate_xml_text(path.read_text(encoding="utf-8"), uas=False)
+            self.assertIn("407", str(ctx.exception))
+            self.assertIn("auth", str(ctx.exception))
 
 
 if __name__ == "__main__":

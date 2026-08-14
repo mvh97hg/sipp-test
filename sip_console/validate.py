@@ -13,6 +13,19 @@ def _contact_lines(text: str) -> list[str]:
     return [ln for ln in text.splitlines() if "Contact:" in ln]
 
 
+def _local_tag(tag: str) -> str:
+    return tag.rsplit("}", 1)[-1]
+
+
+def _recv_has_auth(tree: ET.Element, code: str) -> bool:
+    for el in tree.iter():
+        if _local_tag(el.tag) != "recv":
+            continue
+        if el.get("response") == code and el.get("auth") == "true":
+            return True
+    return False
+
+
 def validate_xml_text(text: str, *, uas: bool = False) -> None:
     tree = ET.fromstring(text)
     if tree.tag != "scenario":
@@ -35,10 +48,11 @@ def validate_xml_text(text: str, *, uas: bool = False) -> None:
     if uas:
         return
 
-    if 'response="401"' not in text or 'auth="true"' not in text:
-        raise ValueError('must contain response="401" and auth="true"')
-    if 'response="407"' not in text or 'auth="true"' not in text:
-        raise ValueError('must contain response="407" and auth="true"')
+    for code in ("401", "407"):
+        if not _recv_has_auth(tree, code):
+            raise ValueError(
+                f'recv response="{code}" must also have auth="true" on the same element'
+            )
     if AUTH_SNIPPET not in text:
         raise ValueError(
             "must contain [authentication username=[field3] password=[field4]]"

@@ -39,7 +39,8 @@ def run_regression(root: Path, profile_path: Path) -> int:
             print(f"FAIL {name}: unknown scenario {scenario}")
             failed += 1
             continue
-        rc = run_sipp(root, scenario, phase=name)
+        run_dir = outroot / name
+        rc = run_sipp(root, scenario, phase=name, artifact_dir=run_dir)
         if rc == 0:
             print(f"PASS {name}")
             passed += 1
@@ -47,7 +48,11 @@ def run_regression(root: Path, profile_path: Path) -> int:
             print(f"FAIL {name} exit={rc}")
             failed += 1
 
-    summary = {"passed": passed, "failed": failed, "artifacts": str(outroot)}
+    summary = {
+        "passed": passed,
+        "failed": failed,
+        "artifacts": str(outroot),
+    }
     (outroot / "summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
     print(f"\nPASS={passed} FAIL={failed}")
     print(f"Artifacts: {outroot}")

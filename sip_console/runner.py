@@ -22,10 +22,13 @@ def run_sipp(
     max_concurrent: int | None = None,
     phase: str | None = None,
     local_port: str | None = None,
+    artifact_dir: Path | None = None,
 ) -> int:
     env = os.environ
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    out = root / "artifacts" / f"{stamp}-{phase or scenario}"
+    out = artifact_dir if artifact_dir is not None else (
+        root / "artifacts" / f"{stamp}-{phase or scenario}"
+    )
     out.mkdir(parents=True, exist_ok=True)
     csv_run = None
     if not is_uas(scenario) and (root / "data/users.csv").is_file():
