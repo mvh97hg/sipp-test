@@ -5,9 +5,13 @@ Example environment:
 ```bash
 export SIP_TARGET=10.10.0.10:5060
 export SIP_DOMAIN=pbx.example.com
+export SIP_AUTH_USER=1234
+export SIP_AUTH_PASS=secret
+export SIP_EXTERNAL_IP=123.24.143.114
+# SIP_CONTACT_HOST still works as alias for SIP_EXTERNAL_IP
 ```
 
-CSV:
+CSV (`SEQUENTIAL` + three columns; auth from env):
 
 ```text
 1000;2000;tenant-a.example.com
@@ -16,9 +20,11 @@ CSV:
 The call uses:
 
 ```text
-caller  = 1000
-service = 2000
-domain  = tenant-a.example.com
+caller     = 1000
+service    = 2000
+domain     = tenant-a.example.com
+auth user  = SIP_AUTH_USER (field3)
+auth pass  = SIP_AUTH_PASS (field4)
 ```
 
 If CSV contains only:
@@ -40,3 +46,9 @@ If `SIP_DOMAIN` is unset, domain becomes:
 ```
 
 `SIP_TARGET` is still the transport destination.
+
+Contact host is not a CSV field. The runner passes it to SIPp with `-set`:
+
+```text
+SIP_EXTERNAL_IP → SIP_CONTACT_HOST → SIP_LOCAL_IP → 127.0.0.1
+```

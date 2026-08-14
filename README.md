@@ -1,4 +1,4 @@
-# SIP Test Console 1.0.1
+# SIP Test Console 1.1.0
 
 A complete CLI-first SIP/Asterisk test harness built around SIPp.
 
@@ -29,7 +29,6 @@ Required:
 
 ```bash
 sipp -v
-bash
 python3
 ```
 
@@ -42,7 +41,7 @@ Optional:
 Check:
 
 ```bash
-./scripts/check.sh
+python3 -m sip_console check
 ```
 
 ## 2. Configuration
@@ -53,6 +52,10 @@ Set the target:
 export SIP_TARGET=10.10.0.10:5060
 export SIP_SERVICE=1000
 export SIP_LOCAL_IP=10.10.0.20
+export SIP_AUTH_USER=1234
+export SIP_AUTH_PASS=secret
+export SIP_EXTERNAL_IP=123.24.143.114
+# SIP_CONTACT_HOST still works as alias for SIP_EXTERNAL_IP
 ```
 
 For a different SIP transport:
@@ -66,7 +69,7 @@ Most scenarios use the SIPp `[local_ip]` / `[media_ip]` variables, so explicit l
 ## 3. Basic outbound call
 
 ```bash
-./scripts/run.sh uac-basic
+python3 -m sip_console run uac-basic
 ```
 
 The scenario:
@@ -86,7 +89,7 @@ INVITE
 Start the test server:
 
 ```bash
-./scripts/run.sh uas-answer --listen 5060
+python3 -m sip_console run uas-answer --listen 5060
 ```
 
 Then originate from Asterisk toward the SIPp host.
@@ -96,7 +99,7 @@ The UAS scenario answers the INVITE and keeps the call alive for 10 seconds.
 ## 5. Load test
 
 ```bash
-./scripts/load.sh profiles/load-100cps.yaml
+python3 -m sip_console load profiles/load-100cps.yaml
 ```
 
 Example profile:
@@ -112,13 +115,13 @@ calls: 10000
 For a safer first test:
 
 ```bash
-./scripts/load.sh profiles/load-10cps.yaml
+python3 -m sip_console load profiles/load-10cps.yaml
 ```
 
 ## 6. Ramp test
 
 ```bash
-./scripts/load.sh profiles/ramp.yaml
+python3 -m sip_console load profiles/ramp.yaml
 ```
 
 The runner uses SIPp's rate control and records each phase as a separate artifact.
@@ -126,7 +129,7 @@ The runner uses SIPp's rate control and records each phase as a separate artifac
 ## 7. Regression
 
 ```bash
-./scripts/regression.sh profiles/regression.yaml
+python3 -m sip_console regression profiles/regression.yaml
 ```
 
 The suite runs:
@@ -157,7 +160,7 @@ INVITE
 Run:
 
 ```bash
-./scripts/run.sh dtmf
+python3 -m sip_console run dtmf
 ```
 
 This tests SIP INFO DTMF signaling. If your system uses RFC2833/4733, use a media-oriented DTMF scenario instead.
@@ -167,7 +170,7 @@ This tests SIP INFO DTMF signaling. If your system uses RFC2833/4733, use a medi
 Run:
 
 ```bash
-./scripts/run.sh rtp-echo
+python3 -m sip_console run rtp-echo
 ```
 
 The scenario uses SIPp media variables and enables RTP echo where supported by the installed SIPp build.
@@ -208,11 +211,14 @@ Do not assume PCAP payload compatibility across codecs. For deterministic regres
 Set:
 
 ```bash
-export SIP_USER=1001
-export SIP_PASSWORD=secret
+export SIP_AUTH_USER=1234
+export SIP_AUTH_PASS=secret
 ```
 
-The scenario demonstrates the SIPp authentication flow. Exact credentials and realm must match Asterisk.
+CSV `[field3]` / `[field4]` carry those credentials (env fallback if the CSV
+row has only three columns). A 401/407 challenge ACKs and re-INVITEs with
+SIPp `[authentication username=[field3] password=[field4]]`. Exact credentials
+and realm must match Asterisk.
 
 ## 12. Results
 
@@ -387,7 +393,7 @@ Use a dedicated Asterisk instance or explicit test tenant/trunk.
 Start small and verify:
 
 ```bash
-./scripts/check.sh
+python3 -m sip_console check
 ```
 
 before running load.
@@ -428,7 +434,7 @@ For this package, latency is collected from SIPp's `-trace_rtt` and
 `-trace_stat` artifacts instead. This avoids an unbalanced RTD state inside
 the scenario while preserving the raw timing data for later reporting.
 
-`./scripts/validate.sh` now fails if any scenario contains `start_rtd=` or
+`python3 -m sip_console validate` now fails if any scenario contains `start_rtd=` or
 `stop_rtd=`.
 
 
@@ -484,10 +490,10 @@ CSV fields are normalized before SIPp starts:
 [field0] = caller
 [field1] = service/destination
 [field2] = domain
-[field3] = Contact host
+[field3] = Contact host   (superseded in 1.1.0: field3/field4 are auth)
 ```
 
-Fallbacks:
+Fallbacks (1.0.5; see 1.1.0 for current Contact / auth mapping):
 
 ```text
 service      = field1 -> SIP_SERVICE
@@ -526,19 +532,19 @@ first positional argument before any `set -u` access.
 Run:
 
 ```bash
-./scripts/run.sh uac-basic
+python3 -m sip_console run uac-basic
 ```
 
 A missing scenario now prints:
 
 ```text
-usage: ./scripts/run.sh <scenario>
+usage: python3 -m sip_console run <scenario>
 ```
 
-You can also run the shell/validator smoke test:
+You can also run scenario validation:
 
 ```bash
-./scripts/smoke.sh
+python3 -m sip_console validate
 ```
 
 
@@ -565,4 +571,34 @@ A regression test is included:
 
 ```bash
 python3 tools/test_prepare_csv.py
+```
+
+
+## 1.1.0
+
+Breaking change: the control plane is Python-only (`python3 -m sip_console`).
+Bash is not a required runtime. Required tools are `python3` and `sipp`.
+
+CSV fields:
+
+```text
+[field0] = caller
+[field1] = destination / service     → SIP_SERVICE
+[field2] = SIP domain                → SIP_DOMAIN → host(SIP_TARGET)
+[field3] = auth username             → SIP_AUTH_USER
+[field4] = auth password             → SIP_AUTH_PASS
+
+contact_host (SIPp -set, not CSV):
+  SIP_EXTERNAL_IP → SIP_CONTACT_HOST → SIP_LOCAL_IP → 127.0.0.1
+```
+
+`data/users.csv` remains `SEQUENTIAL` plus three-column rows. Auth comes from
+the environment when field3/field4 are empty.
+
+Example:
+
+```bash
+python3 -m sip_console run uac-basic
+python3 -m sip_console validate
+python3 -m sip_console check
 ```
