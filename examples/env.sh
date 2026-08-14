@@ -8,4 +8,4 @@ export SIP_TRANSPORT=udp
 export SIP_AUTH_USER=1234
 export SIP_AUTH_PASS=secret
 export SIP_EXTERNAL_IP=123.24.143.114
-# SIP_CONTACT_HOST still works as alias for SIP_EXTERNAL_IP
+# SIP_EXTERNAL_IP becomes SIPp -i / [local_ip]. SIP_CONTACT_HOST is an alias.

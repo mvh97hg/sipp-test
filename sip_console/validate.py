@@ -60,12 +60,12 @@ def validate_xml_text(text: str, *, uas: bool = False) -> None:
 
     contacts = _contact_lines(text)
     if not contacts:
-        raise ValueError("Contact must contain @[contact_host]")
+        raise ValueError("Contact must contain @[local_ip]")
     for line in contacts:
         if "@[field3]" in line:
             raise ValueError("Contact must not contain @[field3]")
-        if "@[contact_host]" not in line:
-            raise ValueError("Contact must contain @[contact_host]")
+        if "@[local_ip]" not in line:
+            raise ValueError("Contact must contain @[local_ip]")
 
 
 def _is_uas_path(path: Path, repo: Path) -> bool:

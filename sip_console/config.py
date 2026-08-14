@@ -30,7 +30,7 @@ def transport_mode(value: str) -> str:
     return TRANSPORT[value]
 
 
-def resolve_contact_host(env: Mapping[str, str]) -> str:
+def resolve_local_ip(env: Mapping[str, str]) -> str:
     for key in ("SIP_EXTERNAL_IP", "SIP_CONTACT_HOST", "SIP_LOCAL_IP"):
         val = (env.get(key) or "").strip()
         if val:

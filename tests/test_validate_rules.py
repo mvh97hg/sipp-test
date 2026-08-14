@@ -13,7 +13,7 @@ GOOD_XML = """<?xml version="1.0" encoding="ISO-8859-1" ?>
   <recv response="407" auth="true" optional="true"/>
   <send><![CDATA[
 INVITE sip:[field1]@[field2] SIP/2.0
-Contact: <sip:[field0]@[contact_host]:[local_port];transport=[transport]>
+Contact: <sip:[field0]@[local_ip]:[local_port];transport=[transport]>
 [authentication username=[field3] password=[field4]]
   ]]></send>
 </scenario>
@@ -38,7 +38,7 @@ UNPAIRED_407_XML = """<?xml version="1.0" encoding="ISO-8859-1" ?>
   <recv response="407" optional="true"/>
   <send><![CDATA[
 INVITE sip:[field1]@[field2] SIP/2.0
-Contact: <sip:[field0]@[contact_host]:[local_port];transport=[transport]>
+Contact: <sip:[field0]@[local_ip]:[local_port];transport=[transport]>
 [authentication username=[field3] password=[field4]]
   ]]></send>
 </scenario>

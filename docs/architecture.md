@@ -47,8 +47,10 @@ If `SIP_DOMAIN` is unset, domain becomes:
 
 `SIP_TARGET` is still the transport destination.
 
-Contact host is not a CSV field. The runner passes it to SIPp with `-key`:
+Contact uses SIPp `[local_ip]`. The runner sets `-i` from:
 
 ```text
 SIP_EXTERNAL_IP → SIP_CONTACT_HOST → SIP_LOCAL_IP → 127.0.0.1
 ```
+
+If `SIP_EXTERNAL_IP` is set, that value becomes SIPp `-i` (and therefore `[local_ip]` in Contact/Via/From).

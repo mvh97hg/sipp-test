@@ -37,15 +37,7 @@ The following Zoiper-specific headers are intentionally not copied:
 `X-cisco-serviceuri`, `Allow-Events`, and the exact Zoiper `User-Agent`.
 They are application-specific rather than mandatory for a baseline INVITE.
 
-For NAT, Contact uses SIPp `[contact_host]` (`-key`, not CSV field3).
-Resolution order:
-
-```text
-SIP_EXTERNAL_IP → SIP_CONTACT_HOST → SIP_LOCAL_IP → 127.0.0.1
-```
-
-`SIP_LOCAL_IP` is the address SIPp binds to; `SIP_EXTERNAL_IP` (or the
-`SIP_CONTACT_HOST` alias) is what the Contact header advertises.
+For NAT, set `SIP_EXTERNAL_IP` so the runner passes it as SIPp `-i`. Contact, Via, and From then use built-in `[local_ip]`. `SIP_CONTACT_HOST` is still accepted as an alias for `SIP_EXTERNAL_IP`.
 
 If the UAS challenges with 401/407, the scenario ACKs and re-INVITEs with
 `[authentication username=[field3] password=[field4]]`. Those CSV fields

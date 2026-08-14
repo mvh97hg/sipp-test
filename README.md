@@ -588,7 +588,7 @@ CSV fields:
 [field3] = auth username             → SIP_AUTH_USER
 [field4] = auth password             → SIP_AUTH_PASS
 
-contact_host (SIPp `-key`, not CSV):
+SIPp `[local_ip]` (`-i`, not CSV):
   SIP_EXTERNAL_IP → SIP_CONTACT_HOST → SIP_LOCAL_IP → 127.0.0.1
 ```
 
