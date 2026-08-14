@@ -39,9 +39,10 @@ def build_sipp_cmd(
             cmd += ["-s", service]
         if local_port:
             cmd += ["-p", local_port]
-        cmd += ["-set", "contact_host", contact_host]
         if csv_path is not None:
             cmd += ["-inf", str(csv_path)]
+    if contact_host:
+        cmd += ["-set", "contact_host", contact_host]
     cmd += ["-m", str(call_limit)]
     if rate is not None:
         cmd += ["-r", str(rate)]

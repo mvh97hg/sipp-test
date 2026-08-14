@@ -35,6 +35,8 @@ class BuildTests(unittest.TestCase):
         self.assertNotIn("10.0.0.5:5060", cmd)
         self.assertEqual(cmd[cmd.index("-p") + 1], "5060")
         self.assertNotIn("-inf", cmd)
+        i = cmd.index("-set")
+        self.assertEqual(cmd[i : i + 3], ["-set", "contact_host", "10.0.0.9"])
 
 
 if __name__ == "__main__":
