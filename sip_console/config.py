@@ -19,9 +19,20 @@ SCENARIOS = {
     "uac-busy": ("scenarios/negative/uac-busy.xml", "uac"),
     "uac-notfound": ("scenarios/negative/uac-notfound.xml", "uac"),
     "uac-service-unavailable": ("scenarios/negative/uac-service-unavailable.xml", "uac"),
+    "uac-options": ("scenarios/signaling/uac-options.xml", "uac"),
+    "uac-register": ("scenarios/signaling/uac-register.xml", "uac"),
+    "dtmf-rfc4733": ("scenarios/features/dtmf-rfc4733.xml", "uac"),
+    "uac-cancel": ("scenarios/signaling/uac-cancel.xml", "uac"),
+    "uac-hold": ("scenarios/features/uac-hold.xml", "uac"),
+    "uac-prack": ("scenarios/features/uac-prack.xml", "uac"),
+    "uac-refer": ("scenarios/features/uac-refer.xml", "uac"),
 }
 
-MEDIA_SCENARIOS = {"uac-basic", "dtmf", "rtp-echo", "uas-answer", "uac-auth", "uac-busy", "uac-notfound", "uac-service-unavailable"}
+MEDIA_SCENARIOS = {
+    "uac-basic", "dtmf", "rtp-echo", "uas-answer", "uac-auth",
+    "uac-busy", "uac-notfound", "uac-service-unavailable",
+    "dtmf-rfc4733", "uac-cancel", "uac-hold", "uac-prack", "uac-refer",
+}
 
 # Seconds on hold after ACK (before local BYE), if nothing else is set.
 SCENARIO_HOLD_S = {
@@ -30,6 +41,9 @@ SCENARIO_HOLD_S = {
     "rtp-echo": 10,
     "dtmf": 5,
     "uas-answer": 10,
+    "uac-register": 1,
+    "dtmf-rfc4733": 8,
+    "uac-hold": 8,
 }
 
 

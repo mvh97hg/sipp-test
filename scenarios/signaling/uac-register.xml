@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE scenario SYSTEM "sipp.dtd">
+<scenario name="uac-register">
+  <send retrans="500"><![CDATA[
+REGISTER sip:[field2] SIP/2.0
+Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
+Max-Forwards: 70
+Contact: <sip:[field0]@[field5]:[local_port];transport=[transport]>
+To: <sip:[field0]@[field2]>
+From: <sip:[field0]@[field2]>;tag=[call_number]
+Call-ID: [call_id]
+CSeq: 1 REGISTER
+Expires: 3600
+User-Agent: Sip-Console/1.1.0
+Content-Length: 0
+  ]]></send>
+  <recv response="401" auth="true" optional="true" next="auth-register"/>
+  <recv response="407" auth="true" optional="true" next="auth-register"/>
+  <recv response="200" timeout="8000"/>
+  <nop next="unregister"/>
+  <label id="auth-register"/>
+  <send retrans="500"><![CDATA[
+REGISTER sip:[field2] SIP/2.0
+Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
+Max-Forwards: 70
+Contact: <sip:[field0]@[field5]:[local_port];transport=[transport]>
+To: <sip:[field0]@[field2]>
+From: <sip:[field0]@[field2]>;tag=[call_number]
+Call-ID: [call_id]
+CSeq: 2 REGISTER
+Expires: 3600
+[authentication username=[field3] password=[field4]]
+User-Agent: Sip-Console/1.1.0
+Content-Length: 0
+  ]]></send>
+  <recv response="200" timeout="8000"/>
+  <label id="unregister"/>
+  <send retrans="500"><![CDATA[
+REGISTER sip:[field2] SIP/2.0
+Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
+Max-Forwards: 70
+Contact: <sip:[field0]@[field5]:[local_port];transport=[transport]>
+To: <sip:[field0]@[field2]>
+From: <sip:[field0]@[field2]>;tag=[call_number]
+Call-ID: [call_id]
+CSeq: [last_cseq_number+1] REGISTER
+Expires: 0
+[authentication username=[field3] password=[field4]]
+User-Agent: Sip-Console/1.1.0
+Content-Length: 0
+  ]]></send>
+  <recv response="200" timeout="8000"/>
+</scenario>

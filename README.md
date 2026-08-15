@@ -104,6 +104,28 @@ export SIP_HOLD_MS=30000
 
 Load profiles may set `duration: 30` (seconds) on the profile or on a phase. Defaults: `uac-basic`/`uac-auth`/`dtmf` 5s, `rtp-echo`/`uas-answer` 10s. Peer BYE during hold is answered with 200 and the call ends.
 
+## 3b. Voice scenario matrix
+
+| Scenario | Command | Proves | PBX need |
+|---|---|---|---|
+| `uac-options` | `make options` | OPTIONS ping | any SIP UA/PBX |
+| `uac-register` | `make register` | REGISTER + Expires 0 | extension/AOR |
+| `uac-basic` | `make basic` | INVITE/200/ACK/BYE | trunk or registered peer |
+| `uac-auth` | `python3 -m sip_console run uac-auth` | digest 401/407 | challenge enabled |
+| `rtp-echo` | `make rtp` | RTP media | media path open |
+| `dtmf` | `make dtmf` | SIP INFO DTMF | INFO IVR |
+| `dtmf-rfc4733` | `make dtmf-rtp` | RFC 4733 DTMF | RTP telephone-event |
+| `uac-hold` | `make hold` | re-INVITE sendonly | hold |
+| `uac-cancel` | `make cancel` | CANCEL / 487 | ringing cancel |
+| `uac-prack` | `make prack` | 100rel PRACK | 100rel |
+| `uac-refer` | `make refer` | blind REFER | transfer; set `SIP_REFER_TO` |
+| `uas-answer` | `make uas` | inbound answer | originate toward SIPp |
+| negative 486/404/503 | `python3 -m sip_console run uac-busy` | error + ACK | matching cause |
+
+Default `make regression` runs options, basic, auth, rtp-echo, and INFO DTMF. Enable the rest in `profiles/regression.yaml` when the PBX supports them.
+
+TLS: `SIP_TRANSPORT=tls` plus `SIP_TLS_CERT` (and usually `SIP_TLS_KEY`).
+
 ## 4. Inbound UAS
 
 Start the test server:

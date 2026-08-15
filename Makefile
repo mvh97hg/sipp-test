@@ -1,4 +1,4 @@
-.PHONY: check validate basic load ramp regression list clean
+.PHONY: check validate basic uas dtmf dtmf-rtp rtp options register cancel hold prack refer load load100 ramp regression list clean
 
 check:
 	python3 -m sip_console check
@@ -15,8 +15,29 @@ uas:
 dtmf:
 	python3 -m sip_console run dtmf
 
+dtmf-rtp:
+	python3 -m sip_console run dtmf-rfc4733
+
 rtp:
 	python3 -m sip_console run rtp-echo
+
+options:
+	python3 -m sip_console run uac-options
+
+register:
+	python3 -m sip_console run uac-register
+
+cancel:
+	python3 -m sip_console run uac-cancel
+
+hold:
+	python3 -m sip_console run uac-hold
+
+prack:
+	python3 -m sip_console run uac-prack
+
+refer:
+	python3 -m sip_console run uac-refer
 
 load:
 	python3 -m sip_console load profiles/load-10cps.yaml

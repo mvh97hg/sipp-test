@@ -1,8 +1,38 @@
-name: asterisk-regression
+name: voice-regression
 tests:
+  - name: options
+    scenario: uac-options
+    enabled: true
+  - name: register
+    scenario: uac-register
+    enabled: false
   - name: basic
     scenario: uac-basic
     enabled: true
+  - name: auth
+    scenario: uac-auth
+    enabled: true
+  - name: rtp-echo
+    scenario: rtp-echo
+    enabled: true
+  - name: dtmf-info
+    scenario: dtmf
+    enabled: true
+  - name: dtmf-rfc4733
+    scenario: dtmf-rfc4733
+    enabled: false
+  - name: hold
+    scenario: uac-hold
+    enabled: false
+  - name: cancel
+    scenario: uac-cancel
+    enabled: false
+  - name: prack
+    scenario: uac-prack
+    enabled: false
+  - name: refer
+    scenario: uac-refer
+    enabled: false
   - name: busy
     scenario: uac-busy
     enabled: false
@@ -12,9 +42,3 @@ tests:
   - name: service-unavailable
     scenario: uac-service-unavailable
     enabled: false
-  - name: dtmf
-    scenario: dtmf
-    enabled: true
-  - name: rtp-echo
-    scenario: rtp-echo
-    enabled: true

@@ -24,5 +24,7 @@ advertise ([field5], -mi)   = SIP_EXTERNAL_IP → SIP_CONTACT_HOST
 
 `SIP_STUN=0` disables STUN. `SIP_STUN_SERVER` overrides the default STUN host.
 
+`SIP_REFER_TO` is the Refer-To URI for `uac-refer`. TLS uses `SIP_TLS_CERT` / `SIP_TLS_KEY` / `SIP_TLS_CA`.
+
 `SIP_TARGET` remains the network destination. It is only used as the final
 fallback for the SIP domain.

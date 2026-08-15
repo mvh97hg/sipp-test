@@ -30,6 +30,16 @@ class BuildTests(unittest.TestCase):
         self.assertNotIn("-trace_calldebug", cmd)
         self.assertNotIn("-calldebug_file", cmd)
 
+    def test_options_has_no_media_ports(self):
+        cmd = build_sipp_cmd(
+            root=self.root, scenario="uac-options", target="10.0.0.5:5060",
+            service="1000", transport="udp", local_ip="1.2.3.4",
+            local_port="", media_ip="1.2.3.4", media_port="6000",
+            csv_path=Path("/tmp/u.csv"), artifact_dir=self.art, call_limit=1,
+        )
+        self.assertNotIn("-mp", cmd)
+        self.assertNotIn("-mi", cmd)
+
     def test_debug_enables_calldebug_not_messages(self):
         cmd = build_sipp_cmd(
             root=self.root, scenario="uac-basic", target="10.0.0.5:5060",
@@ -66,6 +76,37 @@ class BuildTests(unittest.TestCase):
         )
         self.assertIn("-inf", cmd)
         self.assertEqual(cmd[cmd.index("-mi") + 1], "203.0.113.1")
+
+    def test_refer_passes_key(self):
+        cmd = build_sipp_cmd(
+            root=self.root, scenario="uac-refer", target="10.0.0.5:5060",
+            service="1000", transport="udp", local_ip="1.2.3.4",
+            local_port="", media_ip="1.2.3.4", media_port="6000",
+            csv_path=Path("/tmp/u.csv"), artifact_dir=self.art, call_limit=1,
+            refer_to="sip:1001@example.com",
+        )
+        self.assertEqual(cmd[cmd.index("-key") + 1], "refer_to")
+        self.assertEqual(cmd[cmd.index("-key") + 2], "sip:1001@example.com")
+
+    def test_tls_flags_only_for_tls(self):
+        udp = build_sipp_cmd(
+            root=self.root, scenario="uac-options", target="10.0.0.5:5060",
+            service="1000", transport="udp", local_ip="1.2.3.4",
+            local_port="", media_ip="1.2.3.4", media_port="6000",
+            csv_path=Path("/tmp/u.csv"), artifact_dir=self.art, call_limit=1,
+            tls_cert="/tmp/cert.pem",
+        )
+        self.assertNotIn("-tls_cert", udp)
+        tls = build_sipp_cmd(
+            root=self.root, scenario="uac-options", target="10.0.0.5:5060",
+            service="1000", transport="tls", local_ip="1.2.3.4",
+            local_port="", media_ip="1.2.3.4", media_port="6000",
+            csv_path=Path("/tmp/u.csv"), artifact_dir=self.art, call_limit=1,
+            tls_cert="/tmp/cert.pem", tls_key="/tmp/key.pem", tls_ca="/tmp/ca.pem",
+        )
+        self.assertEqual(tls[tls.index("-tls_cert") + 1], "/tmp/cert.pem")
+        self.assertEqual(tls[tls.index("-tls_key") + 1], "/tmp/key.pem")
+        self.assertEqual(tls[tls.index("-tls_ca") + 1], "/tmp/ca.pem")
 
 
 if __name__ == "__main__":

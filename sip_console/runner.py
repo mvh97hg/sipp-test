@@ -4,6 +4,7 @@ import fcntl
 import os
 import select
 import shlex
+import shutil
 import signal
 import struct
 import subprocess
@@ -15,7 +16,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import IO
 
-from sip_console.config import debug_enabled, hold_ms, is_uas
+from sip_console.config import debug_enabled, hold_ms, is_uas, transport_mode
 from sip_console.csv_inject import write_normalized_csv
 from sip_console.net import resolve_bind_advertise
 from sip_console.result import normalize_sipp_exit, write_result
@@ -276,6 +277,10 @@ def run_sipp(
         root / "logs" / f"{stamp}-{phase or scenario}"
     )
     out.mkdir(parents=True, exist_ok=True)
+    if scenario == "dtmf-rfc4733":
+        src = root / "pcap" / "dtmf-rfc4733-1.pcap"
+        if src.is_file():
+            shutil.copy(src, out / src.name)
     csv_run = out / "users.normalized.csv"
     target = env.get("SIP_TARGET", "127.0.0.1:5060")
     bind_ip, advertise_ip = resolve_bind_advertise(env, target)
@@ -304,12 +309,28 @@ def run_sipp(
     except RuntimeError as exc:
         print(f"ERROR: {exc}", flush=True)
         return 1
+    transport = env.get("SIP_TRANSPORT", "udp")
+    tls_cert = env.get("SIP_TLS_CERT", "").strip()
+    tls_key = env.get("SIP_TLS_KEY", "").strip()
+    tls_ca = env.get("SIP_TLS_CA", "").strip()
+    try:
+        mode = transport_mode(transport)
+    except SystemExit as exc:
+        print(f"ERROR: {exc}", flush=True)
+        return 1
+    if mode in {"l1", "ln"} and not tls_cert:
+        print("ERROR: SIP_TRANSPORT=tls requires SIP_TLS_CERT", flush=True)
+        return 1
+    refer_to = env.get("SIP_REFER_TO", "").strip()
+    if scenario == "uac-refer" and not refer_to:
+        domain = env.get("SIP_DOMAIN", "") or advertise_ip
+        refer_to = f"sip:{env.get('SIP_SERVICE', '1000')}@{domain}"
     cmd = build_sipp_cmd(
         root=root,
         scenario=scenario,
         target=target,
         service=env.get("SIP_SERVICE", ""),
-        transport=env.get("SIP_TRANSPORT", "udp"),
+        transport=transport,
         local_ip=bind_ip,
         local_port=port,
         media_ip=env.get("SIP_MEDIA_IP", "") or advertise_ip,
@@ -323,6 +344,10 @@ def run_sipp(
         hold_ms=hold,
         debug=dbg,
         sipp_bin=sipp_bin,
+        refer_to=refer_to,
+        tls_cert=tls_cert,
+        tls_key=tls_key,
+        tls_ca=tls_ca,
     )
     (out / "command.txt").write_text(shlex.join(cmd) + "\n", encoding="utf-8")
     rc = run_sipp_child(cmd, out, out / "stdout.log", out / "stderr.log")

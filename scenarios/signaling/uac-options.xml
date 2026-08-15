@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE scenario SYSTEM "sipp.dtd">
+<scenario name="uac-options">
+  <send retrans="500"><![CDATA[
+OPTIONS sip:[field1]@[field2] SIP/2.0
+Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
+Max-Forwards: 70
+Contact: <sip:[field0]@[field5]:[local_port];transport=[transport]>
+To: <sip:[field1]@[field2]>
+From: <sip:[field0]@[field2]>;tag=[call_number]
+Call-ID: [call_id]
+CSeq: 1 OPTIONS
+Accept: application/sdp
+Content-Length: 0
+  ]]></send>
+  <recv response="401" auth="true" optional="true" next="auth-options"/>
+  <recv response="407" auth="true" optional="true" next="auth-options"/>
+  <recv response="200" timeout="5000"/>
+  <nop next="done"/>
+  <label id="auth-options"/>
+  <send><![CDATA[
+OPTIONS sip:[field1]@[field2] SIP/2.0
+Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
+Max-Forwards: 70
+Contact: <sip:[field0]@[field5]:[local_port];transport=[transport]>
+To: <sip:[field1]@[field2]>
+From: <sip:[field0]@[field2]>;tag=[call_number]
+Call-ID: [call_id]
+CSeq: 2 OPTIONS
+[authentication username=[field3] password=[field4]]
+Accept: application/sdp
+Content-Length: 0
+  ]]></send>
+  <recv response="200" timeout="5000"/>
+  <label id="done"/>
+</scenario>

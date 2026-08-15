@@ -25,6 +25,10 @@ def build_sipp_cmd(
     hold_ms: int = 5000,
     debug: bool = False,
     sipp_bin: str = "sipp",
+    refer_to: str = "",
+    tls_cert: str = "",
+    tls_key: str = "",
+    tls_ca: str = "",
 ) -> list[str]:
     xml = str(scenario_xml(root, scenario))
     mode = transport_mode(transport)
@@ -82,4 +86,13 @@ def build_sipp_cmd(
         ]
     if extra:
         cmd += extra
+    if scenario == "uac-refer" and refer_to:
+        cmd += ["-key", "refer_to", refer_to]
+    if mode in {"l1", "ln"}:
+        if tls_cert:
+            cmd += ["-tls_cert", tls_cert]
+        if tls_key:
+            cmd += ["-tls_key", tls_key]
+        if tls_ca:
+            cmd += ["-tls_ca", tls_ca]
     return cmd

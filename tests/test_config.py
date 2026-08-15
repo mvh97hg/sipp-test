@@ -36,6 +36,7 @@ class ScenarioTests(unittest.TestCase):
     def test_media(self):
         self.assertTrue(needs_media("uac-basic"))
         self.assertTrue(needs_media("uas-answer"))
+        self.assertFalse(needs_media("uac-options"))
 
     def test_debug_flag(self):
         from sip_console.config import debug_enabled
