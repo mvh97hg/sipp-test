@@ -28,10 +28,10 @@ def find_sipp(root: Path) -> Path | None:
     candidates: list[Path] = []
     if env:
         candidates.append(Path(env).expanduser())
+    candidates.extend(install_paths(root))
     which = shutil.which("sipp")
     if which:
         candidates.append(Path(which))
-    candidates.extend(install_paths(root))
     seen: set[str] = set()
     for path in candidates:
         key = str(path)

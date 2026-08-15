@@ -43,6 +43,18 @@ class SippBinTests(unittest.TestCase):
             path.chmod(0o755)
             self.assertEqual(find_sipp(root), path)
 
+    def test_prefers_repo_binary_over_path(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            local = root / "sipp"
+            path_bin = root / "path-sipp"
+            local.write_bytes(b"local")
+            path_bin.write_bytes(b"path")
+            local.chmod(0o755)
+            path_bin.chmod(0o755)
+            with patch("sip_console.sipp_bin.shutil.which", return_value=str(path_bin)):
+                self.assertEqual(find_sipp(root), local)
+
     def test_finds_binary_in_home(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td) / "repo"

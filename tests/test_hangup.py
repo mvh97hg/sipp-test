@@ -3,6 +3,7 @@ import sys
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from sip_console.config import hold_ms
 from sip_console.sipp_cmd import build_sipp_cmd
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -44,7 +45,8 @@ class HangupTests(unittest.TestCase):
         self.assertEqual(cmd[i + 1], "all,-abortunexp")
         self.assertEqual(cmd[cmd.index("-recv_timeout") + 1], "5000")
 
-    def test_uas_has_no_global_recv_timeout(self):
+    def test_uas_has_recv_timeout_equal_to_hold(self):
+        hold = hold_ms({}, "uas-answer")
         cmd = build_sipp_cmd(
             root=ROOT,
             scenario="uas-answer",
@@ -58,8 +60,10 @@ class HangupTests(unittest.TestCase):
             csv_path=None,
             artifact_dir=Path("/tmp/art"),
             call_limit=1,
+            hold_ms=hold,
         )
-        self.assertNotIn("-recv_timeout", cmd)
+        self.assertEqual(hold, 10000)
+        self.assertEqual(cmd[cmd.index("-recv_timeout") + 1], "10000")
 
     def test_hangup_200_has_timeout(self):
         for path in UAC_XML:

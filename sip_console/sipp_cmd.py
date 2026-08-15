@@ -57,8 +57,7 @@ def build_sipp_cmd(
             cmd += ["-mp", media_port]
     if scenario == "rtp-echo":
         cmd += ["-rtp_echo"]
-    if not uas:
-        cmd += ["-recv_timeout", str(max(1, int(hold_ms)))]
+    cmd += ["-recv_timeout", str(max(1, int(hold_ms)))]
     cmd += ["-d", str(max(1, int(hold_ms)))]
     cmd += [
         "-aa",

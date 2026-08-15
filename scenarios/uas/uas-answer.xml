@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE scenario SYSTEM "sipp.dtd">
 <scenario name="uas-answer">
-  <recv request="INVITE" crlf="true"/>
+  <recv request="INVITE" crlf="true" rrs="true"/>
 
   <send><![CDATA[
 SIP/2.0 100 Trying
@@ -41,8 +41,7 @@ a=sendrecv
   ]]></send>
 
   <recv request="ACK" crlf="true"/>
-  <recv request="BYE"/>
-
+  <recv request="BYE" timeout="10000" ontimeout="local-bye"/>
   <send><![CDATA[
 SIP/2.0 200 OK
 [last_Via:]
@@ -52,6 +51,20 @@ SIP/2.0 200 OK
 [last_CSeq:]
 Content-Length: 0
   ]]></send>
+  <nop next="done"/>
 
+  <label id="local-bye"/>
+  <send><![CDATA[
+BYE [next_url] SIP/2.0
+Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
+[routes]
+Max-Forwards: 70
+From: <sip:uas@[field2]>;tag=[call_number]
+To: [last_From:]
+Call-ID: [call_id]
+CSeq: [last_cseq_number+1] BYE
+Content-Length: 0
+  ]]></send>
+  <recv response="200" timeout="5000" ontimeout="done"/>
   <label id="done"/>
 </scenario>

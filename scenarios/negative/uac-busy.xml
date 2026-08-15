@@ -33,8 +33,17 @@ a=sendrecv
   <recv response="401" auth="true" optional="true" next="auth-invite"/>
   <recv response="407" auth="true" optional="true" next="auth-invite"/>
   <recv response="486"/>
-
-  <nop next="post-auth"/>
+  <send><![CDATA[
+ACK sip:[field1]@[field2]:[remote_port];transport=[transport] SIP/2.0
+Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
+Max-Forwards: 70
+From: <sip:[field0]@[field2];transport=[transport]>;tag=[call_number]
+To: <sip:[field1]@[field2]:[remote_port]>[peer_tag_param]
+Call-ID: [call_id]
+CSeq: 1 ACK
+Content-Length: 0
+  ]]></send>
+  <nop next="done"/>
 
   <label id="auth-invite"/>
   <send><![CDATA[
@@ -80,6 +89,15 @@ a=sendrecv
   <recv response="180" optional="true"/>
   <recv response="183" optional="true"/>
   <recv response="486"/>
-
-  <label id="post-auth"/>
+  <send><![CDATA[
+ACK sip:[field1]@[field2]:[remote_port];transport=[transport] SIP/2.0
+Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
+Max-Forwards: 70
+From: <sip:[field0]@[field2];transport=[transport]>;tag=[call_number]
+To: <sip:[field1]@[field2]:[remote_port]>[peer_tag_param]
+Call-ID: [call_id]
+CSeq: 2 ACK
+Content-Length: 0
+  ]]></send>
+  <label id="done"/>
 </scenario>

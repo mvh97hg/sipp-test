@@ -11,7 +11,7 @@ From: <sip:[field0]@[field2];transport=[transport]>;tag=[call_number]
 Call-ID: [call_id]
 CSeq: 1 INVITE
 Allow: INVITE, ACK, UPDATE, PRACK, CANCEL, BYE, NOTIFY, REFER, MESSAGE, OPTIONS, INFO, SUBSCRIBE
-Supported: replaces, norefersub, extended-refer, timer, outbound, path, 100rel
+Supported: replaces, norefersub, extended-refer, timer, outbound, path
 User-Agent: Sip-Console/1.1.0
 Content-Type: application/sdp
 Content-Length: [len]
@@ -60,7 +60,7 @@ From: <sip:[field0]@[field2];transport=[transport]>;tag=[call_number]
 Call-ID: [call_id]
 CSeq: 2 INVITE
 Allow: INVITE, ACK, UPDATE, PRACK, CANCEL, BYE, NOTIFY, REFER, MESSAGE, OPTIONS, INFO, SUBSCRIBE
-Supported: replaces, norefersub, extended-refer, timer, outbound, path, 100rel
+Supported: replaces, norefersub, extended-refer, timer, outbound, path
 User-Agent: Sip-Console/1.1.0
 [authentication username=[field3] password=[field4]]
 Content-Type: application/sdp
