@@ -21,6 +21,9 @@ rtp:
 load:
 	python3 -m sip_console load profiles/load-10cps.yaml
 
+load100:
+	python3 -m sip_console load profiles/load-100cps.yaml
+
 ramp:
 	python3 -m sip_console load profiles/ramp.yaml
 

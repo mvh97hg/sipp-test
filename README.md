@@ -46,22 +46,32 @@ python3 -m sip_console check
 
 ## 2. Configuration
 
-Set the target:
+Copy `.env.example` to `.env` in the repo root. The CLI loads it on every command
+(does not override variables already set in the shell). `SIP_ENV_FILE` can point
+to another path.
 
 ```bash
-export SIP_TARGET=10.10.0.10:5060
-export SIP_SERVICE=1000
-export SIP_LOCAL_IP=10.10.0.20
-export SIP_AUTH_USER=1234
-export SIP_AUTH_PASS=secret
-export SIP_EXTERNAL_IP=123.24.143.114
+cp .env.example .env
+```
+
+```bash
+SIP_TARGET=10.10.0.10:5060
+SIP_SERVICE=1000
+SIP_LOCAL_IP=10.10.0.20
+SIP_AUTH_USER=1234
+SIP_AUTH_PASS=secret
+SIP_EXTERNAL_IP=123.123.123.123
+SIP_CALL_DURATION=30
 # SIP_CONTACT_HOST still works as alias for SIP_EXTERNAL_IP
 ```
+
+You can still `export SIP_TARGET=...` for a one-off override. `examples/env.sh`
+is the same settings in shell form.
 
 For a different SIP transport:
 
 ```bash
-export SIP_TRANSPORT=udp
+SIP_TRANSPORT=udp
 ```
 
 Most scenarios use the SIPp `[local_ip]` / `[media_ip]` variables, so explicit local IP is optional when SIPp can determine it correctly.
@@ -79,10 +89,20 @@ INVITE
   -> 100/180/183
   -> 200 OK
   -> ACK
-  -> 5 sec media period
+  -> hold (default 5s, configurable)
   -> BYE
   -> 200 OK
 ```
+
+Hold time (seconds) — first match wins:
+
+```bash
+python3 -m sip_console run uac-basic --duration 30
+export SIP_CALL_DURATION=30
+export SIP_HOLD_MS=30000
+```
+
+Load profiles may set `duration: 30` (seconds) on the profile or on a phase. Defaults: `uac-basic`/`uac-auth`/`dtmf` 5s, `rtp-echo`/`uas-answer` 10s. Peer BYE during hold is answered with 200 and the call ends.
 
 ## 4. Inbound UAS
 
@@ -230,11 +250,10 @@ logs/
     command.txt
     stdout.log
     stderr.log
-    messages.log
     errors.log
     statistics.csv
     shortmessages.log
-    calldebug.log
+    calldebug.log      # only with --debug or SIP_DEBUG=1
     result.json
 ```
 

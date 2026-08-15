@@ -3,3 +3,4 @@ scenario: uac-basic
 cps: 100
 max_concurrent: 1000
 calls: 10000
+duration: 10

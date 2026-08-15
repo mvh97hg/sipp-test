@@ -22,10 +22,13 @@ def build_sipp_cmd(
     rate: int | None = None,
     max_concurrent: int | None = None,
     extra: list[str] | None = None,
+    hold_ms: int = 5000,
+    debug: bool = False,
+    sipp_bin: str = "sipp",
 ) -> list[str]:
     xml = str(scenario_xml(root, scenario))
     mode = transport_mode(transport)
-    cmd = ["sipp"]
+    cmd = [sipp_bin]
     uas = is_uas(scenario)
     if not uas:
         cmd.append(target)
@@ -54,24 +57,30 @@ def build_sipp_cmd(
             cmd += ["-mp", media_port]
     if scenario == "rtp-echo":
         cmd += ["-rtp_echo"]
+    if not uas:
+        cmd += ["-recv_timeout", str(max(1, int(hold_ms)))]
+    cmd += ["-d", str(max(1, int(hold_ms)))]
     cmd += [
-        "-trace_msg",
+        "-aa",
+        "-default_behaviors",
+        "all,-abortunexp",
         "-trace_err",
         "-trace_stat",
         "-trace_rtt",
         "-trace_shortmsg",
-        "-trace_calldebug",
-        "-message_file",
-        str(Path(artifact_dir) / "messages.log"),
         "-error_file",
         str(Path(artifact_dir) / "errors.log"),
         "-stf",
         str(Path(artifact_dir) / "statistics.csv"),
         "-shortmessage_file",
         str(Path(artifact_dir) / "shortmessages.log"),
-        "-calldebug_file",
-        str(Path(artifact_dir) / "calldebug.log"),
     ]
+    if debug:
+        cmd += [
+            "-trace_calldebug",
+            "-calldebug_file",
+            str(Path(artifact_dir) / "calldebug.log"),
+        ]
     if extra:
         cmd += extra
     return cmd

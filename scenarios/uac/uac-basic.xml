@@ -34,7 +34,7 @@ a=sendrecv
   <recv response="183" optional="true"/>
   <recv response="401" auth="true" optional="true" next="auth-invite"/>
   <recv response="407" auth="true" optional="true" next="auth-invite"/>
-  <recv response="200" rrs="true"/>
+  <recv response="200" rrs="true" timeout="32000"/>
 
   <nop next="post-noauth"/>
 
@@ -81,7 +81,7 @@ a=sendrecv
   <recv response="100" optional="true"/>
   <recv response="180" optional="true"/>
   <recv response="183" optional="true"/>
-  <recv response="200" rrs="true"/>
+  <recv response="200" rrs="true" timeout="32000"/>
 
   <label id="post-auth"/>
 
@@ -98,8 +98,20 @@ CSeq: [last_cseq_number] ACK
 Content-Length: 0
   ]]></send>
 
-  <pause milliseconds="5000"/>
+  <recv request="BYE" ontimeout="local-bye-auth"/>
+  <send><![CDATA[
+SIP/2.0 200 OK
+[last_Via:]
+[last_From:]
+[last_To:]
+[last_Call-ID:]
+[last_CSeq:]
+Contact: <sip:[field0]@[field5]:[local_port];transport=[transport]>
+Content-Length: 0
+  ]]></send>
+  <nop next="done"/>
 
+  <label id="local-bye-auth"/>
   <send><![CDATA[
 BYE [next_url] SIP/2.0
 Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
@@ -109,10 +121,10 @@ Contact: <sip:[field0]@[field5]:[local_port];transport=[transport]>
 To: <sip:[field1]@[field2]:[remote_port]>[peer_tag_param]
 From: <sip:[field0]@[field2];transport=[transport]>;tag=[call_number]
 Call-ID: [call_id]
-CSeq: 3 BYE
+CSeq: [last_cseq_number+1] BYE
 Content-Length: 0
   ]]></send>
-  <recv response="200"/>
+  <recv response="200" timeout="5000" ontimeout="done"/>
   <nop next="done"/>
 
   <label id="post-noauth"/>
@@ -130,8 +142,20 @@ CSeq: [last_cseq_number] ACK
 Content-Length: 0
   ]]></send>
 
-  <pause milliseconds="5000"/>
+  <recv request="BYE" ontimeout="local-bye-noauth"/>
+  <send><![CDATA[
+SIP/2.0 200 OK
+[last_Via:]
+[last_From:]
+[last_To:]
+[last_Call-ID:]
+[last_CSeq:]
+Contact: <sip:[field0]@[field5]:[local_port];transport=[transport]>
+Content-Length: 0
+  ]]></send>
+  <nop next="done"/>
 
+  <label id="local-bye-noauth"/>
   <send><![CDATA[
 BYE [next_url] SIP/2.0
 Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch];rport
@@ -141,10 +165,10 @@ Contact: <sip:[field0]@[field5]:[local_port];transport=[transport]>
 To: <sip:[field1]@[field2]:[remote_port]>[peer_tag_param]
 From: <sip:[field0]@[field2];transport=[transport]>;tag=[call_number]
 Call-ID: [call_id]
-CSeq: 2 BYE
+CSeq: [last_cseq_number+1] BYE
 Content-Length: 0
   ]]></send>
-  <recv response="200"/>
+  <recv response="200" timeout="5000" ontimeout="done"/>
 
   <label id="done"/>
 

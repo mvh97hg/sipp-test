@@ -23,7 +23,7 @@ def parse_regression_tests(text: str) -> list[tuple[str, str, bool]]:
     return tests
 
 
-def run_regression(root: Path, profile_path: Path) -> int:
+def run_regression(root: Path, profile_path: Path, *, debug: bool | None = None) -> int:
     text = Path(profile_path).read_text(encoding="utf-8")
     tests = parse_regression_tests(text)
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -40,7 +40,7 @@ def run_regression(root: Path, profile_path: Path) -> int:
             failed += 1
             continue
         run_dir = outroot / name
-        rc = run_sipp(root, scenario, phase=name, artifact_dir=run_dir)
+        rc = run_sipp(root, scenario, phase=name, artifact_dir=run_dir, debug=debug)
         if rc == 0:
             print(f"PASS {name}")
             passed += 1

@@ -18,13 +18,29 @@ class BuildTests(unittest.TestCase):
         )
         self.assertEqual(cmd[0], "sipp")
         self.assertEqual(cmd[1], "10.0.0.5:5060")
-        self.assertNotIn("-set", cmd)
-        self.assertNotIn("-key", cmd)
         self.assertEqual(cmd[cmd.index("-i") + 1], "1.2.3.4")
         self.assertIn("-inf", cmd)
         self.assertEqual(cmd[cmd.index("-t") + 1], "u1")
         self.assertEqual(cmd[cmd.index("-stf") + 1], "/tmp/art/statistics.csv")
         self.assertEqual(cmd[cmd.index("-shortmessage_file") + 1], "/tmp/art/shortmessages.log")
+        self.assertEqual(cmd[cmd.index("-d") + 1], "5000")
+        self.assertEqual(cmd[cmd.index("-recv_timeout") + 1], "5000")
+        self.assertNotIn("-trace_msg", cmd)
+        self.assertNotIn("-message_file", cmd)
+        self.assertNotIn("-trace_calldebug", cmd)
+        self.assertNotIn("-calldebug_file", cmd)
+
+    def test_debug_enables_calldebug_not_messages(self):
+        cmd = build_sipp_cmd(
+            root=self.root, scenario="uac-basic", target="10.0.0.5:5060",
+            service="1000", transport="udp", local_ip="1.2.3.4",
+            local_port="", media_ip="1.2.3.4", media_port="6000",
+            csv_path=Path("/tmp/u.csv"),
+            artifact_dir=self.art, call_limit=1, debug=True,
+        )
+        self.assertNotIn("-trace_msg", cmd)
+        self.assertNotIn("-message_file", cmd)
+        self.assertIn("-trace_calldebug", cmd)
         self.assertEqual(cmd[cmd.index("-calldebug_file") + 1], "/tmp/art/calldebug.log")
 
     def test_uas_has_no_remote_target(self):

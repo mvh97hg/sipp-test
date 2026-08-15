@@ -23,6 +23,31 @@ SCENARIOS = {
 
 MEDIA_SCENARIOS = {"uac-basic", "dtmf", "rtp-echo", "uas-answer", "uac-auth", "uac-busy", "uac-notfound", "uac-service-unavailable"}
 
+# Seconds on hold after ACK (before local BYE), if nothing else is set.
+SCENARIO_HOLD_S = {
+    "uac-basic": 5,
+    "uac-auth": 5,
+    "rtp-echo": 10,
+    "dtmf": 5,
+    "uas-answer": 10,
+}
+
+
+def hold_ms(
+    env: Mapping[str, str],
+    scenario: str,
+    duration_s: float | None = None,
+) -> int:
+    if duration_s is not None:
+        return max(1, int(float(duration_s) * 1000))
+    raw_ms = (env.get("SIP_HOLD_MS") or "").strip()
+    if raw_ms:
+        return max(1, int(raw_ms))
+    raw_s = (env.get("SIP_CALL_DURATION") or "").strip()
+    if raw_s:
+        return max(1, int(float(raw_s) * 1000))
+    return max(1, int(SCENARIO_HOLD_S.get(scenario, 5) * 1000))
+
 
 def transport_mode(value: str) -> str:
     if value not in TRANSPORT:
@@ -54,3 +79,10 @@ def is_uas(name: str) -> bool:
 
 def needs_media(name: str) -> bool:
     return name in MEDIA_SCENARIOS
+
+
+def debug_enabled(env: Mapping[str, str], flag: bool | None = None) -> bool:
+    if flag:
+        return True
+    v = (env.get("SIP_DEBUG") or "").strip().lower()
+    return v in ("1", "true", "yes", "on")

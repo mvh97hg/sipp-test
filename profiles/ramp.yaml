@@ -1,5 +1,6 @@
 name: basic-ramp
 scenario: uac-basic
+duration: 10
 phases:
   - name: warmup
     cps: 5
