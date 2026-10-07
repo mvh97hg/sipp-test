@@ -19,7 +19,8 @@ Linux + `python3`. No extra Python packages. Load tests can overload a live PBX 
 | `make validate` | `… validate` | XML rules |
 | `make basic` | `… run uac-basic` | outbound call |
 | `make uas` | `… run uas-answer --listen 5060` | inbound answer |
-| `make load` | `… load profiles/load-10cps.yaml` | CPS load |
+| `make run load-50cps` | `… load profiles/load-50cps.yaml` | named load profile |
+| `make load` | `… load profiles/load-10cps.yaml` | 10 CPS shortcut |
 | `make regression` | `… regression profiles/regression.yaml` | enabled suite |
 
 `python3 -m sip_console run <scenario> [--duration SEC] [--debug]`

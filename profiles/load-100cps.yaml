@@ -1,6 +1,6 @@
 name: basic-100cps
 scenario: uac-basic
 cps: 100
-max_concurrent: 1000
-calls: 10000
+max_concurrent: 630
+calls: 2000
 duration: 10

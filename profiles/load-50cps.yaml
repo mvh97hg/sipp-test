@@ -1,0 +1,6 @@
+name: basic-50cps
+scenario: uac-basic
+cps: 50
+max_concurrent: 500
+calls: 1000
+duration: 10

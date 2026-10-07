@@ -3,10 +3,15 @@
 Start small. Load can knock over a production PBX or carrier.
 
 ```bash
-python3 -m sip_console load profiles/load-10cps.yaml
-python3 -m sip_console load profiles/load-100cps.yaml
-python3 -m sip_console load profiles/ramp.yaml
+make run load-10cps
+make run load-50cps
+make run load-100cps
+make run ramp
+make run PROFILE=load-50cps
+python3 -m sip_console load profiles/load-50cps.yaml
 ```
+
+`make run <name>` looks up `profiles/<name>.yaml` (or a path you pass). `make load` / `make load100` / `make ramp` still work as shortcuts.
 
 Profile shape:
 

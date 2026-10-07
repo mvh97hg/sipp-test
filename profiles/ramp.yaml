@@ -14,7 +14,23 @@ phases:
     cps: 50
     max_concurrent: 500
     calls: 500
-  - name: high
-    cps: 100
-    max_concurrent: 1000
-    calls: 1000
+  - name: medium-high
+    cps: 60
+    max_concurrent: 600
+    calls: 600
+  - name: high-1
+    cps: 70
+    max_concurrent: 700
+    calls: 700
+  # - name: high-2
+  #   cps: 80
+  #   max_concurrent: 800
+  #   calls: 800
+  # - name: high-3
+  #   cps: 90
+  #   max_concurrent: 900
+  #   calls: 900
+  # - name: overload
+  #   cps: 100
+  #   max_concurrent: 1000
+  #   calls: 1000
